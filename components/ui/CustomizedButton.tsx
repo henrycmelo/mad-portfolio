@@ -18,10 +18,11 @@ export function CustomizedButton({ children, onClick, type = 'button', loading, 
       onClick={onClick}
       loading={loading}
       w={width}
-      color="#F8F9FA"
+      color="text.inverse"
       borderRadius="10px"
-      border="1px solid #107c7c"
-      backgroundColor="#212529"
+      border="1px solid"
+      borderColor="accent.teal"
+      backgroundColor="text.primary"
       fontWeight="800"
       px="6"
       py="6"
@@ -32,7 +33,7 @@ export function CustomizedButton({ children, onClick, type = 'button', loading, 
       transition="all 0.2s"
       css={{
         '&:hover': {
-          backgroundColor: '#495057',
+          backgroundColor: 'var(--chakra-colors-text-secondary)',
         },
       }}
     >

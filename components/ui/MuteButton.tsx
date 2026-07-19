@@ -14,9 +14,10 @@ export function MuteButton({ children, onClick, type = 'button' }: MuteButtonPro
     <Button
       type={type}
       onClick={onClick}
-      color="#212529"
+      color="text.primary"
       backgroundColor="transparent"
-      border="1px solid #212529"
+      border="1px solid"
+      borderColor="text.primary"
       borderRadius="10px"
       fontWeight="800"
       px="6"
@@ -28,8 +29,8 @@ export function MuteButton({ children, onClick, type = 'button' }: MuteButtonPro
       transition="all 0.2s"
       css={{
         '&:hover': {
-          backgroundColor: '#E9ECEF',
-          color: '#212529',
+          backgroundColor: 'var(--chakra-colors-bg-secondary)',
+          color: 'var(--chakra-colors-text-primary)',
         },
       }}
     >

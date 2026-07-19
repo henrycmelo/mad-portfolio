@@ -16,8 +16,8 @@ export function Badge({ children }: BadgeProps) {
       py="1"
       fontSize={{ base: '12px', md: '14px' }}
       fontWeight="400"
-      color="#E9ECEF"
-      bg="gray.600"
+      color="text.inverse"
+      bg="text.tertiary"
       borderRadius="md"
     >
       {children}

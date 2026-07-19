@@ -25,7 +25,7 @@ export function Footer({ contactEmail }: FooterProps) {
         <Text>&copy; Copyright {year}</Text>
         <Text>
           Designed and built with{' '}
-          <FontAwesomeIcon icon={faHeart} size="sm" color="#107c7c" />{' '}
+          <FontAwesomeIcon icon={faHeart} size="sm" color="var(--chakra-colors-accent-teal)" />{' '}
           by Madeline using Next.js & Chakra UI
         </Text>
         {contactEmail && <Text>{contactEmail}</Text>}
