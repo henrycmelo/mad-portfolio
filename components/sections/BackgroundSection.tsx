@@ -1,0 +1,124 @@
+'use client';
+
+import { Box, Text, SimpleGrid, VStack, Flex, Image } from '@chakra-ui/react';
+import type { WorkHistory } from '@/lib/types';
+
+interface BackgroundSectionProps {
+  workHistory: WorkHistory[];
+}
+
+export function BackgroundSection({ workHistory }: BackgroundSectionProps) {
+  const visibleHistory = workHistory
+    .filter(item => item.is_visible)
+    .sort((a, b) => a.order_index - b.order_index);
+
+  if (visibleHistory.length === 0) return null;
+
+  const getYearRange = (item: WorkHistory) => {
+    const startYear = item.start_date.split('-')[0];
+    if (item.is_current) return { start: startYear, end: 'present' };
+    const endYear = item.end_date ? item.end_date.split('-')[0] : 'present';
+    return { start: startYear, end: endYear };
+  };
+
+  return (
+    <Box>
+      {/* Section Title */}
+      <Text
+        as="h2"
+        fontSize={{ base: '32px', sm: '36px', md: '42px', lg: '48px' }}
+        fontWeight="400"
+        color="text.primary"
+        pb={{ base: '8', md: '12' }}
+      >
+        Background
+      </Text>
+
+      <SimpleGrid
+        columns={{ base: 1, md: Math.min(visibleHistory.length, 3) }}
+        gap={{ base: '12', md: '10', lg: '16' }}
+      >
+        {visibleHistory.map((item) => {
+          const years = getYearRange(item);
+          return (
+            <VStack key={item.id} gap="5" textAlign="center">
+              {/* Circular Year Badge */}
+              <Box
+                w={{ base: '110px', md: '120px', lg: '130px' }}
+                h={{ base: '110px', md: '120px', lg: '130px' }}
+                borderRadius="full"
+                border="3px solid"
+                borderColor="accent.navy"
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                mx="auto"
+              >
+                <VStack gap="0">
+                  <Text
+                    color="accent.navy"
+                    fontSize={{ base: 'lg', md: 'xl' }}
+                    fontWeight="bold"
+                    lineHeight="1.2"
+                  >
+                    {years.start}-
+                  </Text>
+                  <Text
+                    color="accent.navy"
+                    fontSize={{ base: 'lg', md: 'xl' }}
+                    fontWeight="bold"
+                    lineHeight="1.2"
+                  >
+                    {years.end}
+                  </Text>
+                </VStack>
+              </Box>
+
+              {/* Category Title */}
+              <Text
+                fontSize={{ base: 'lg', md: 'xl', lg: '2xl' }}
+                fontWeight="400"
+                color="text.primary"
+              >
+                {item.position}
+              </Text>
+
+              {/* Teal Divider Line */}
+              <Box w="60%" h="2px" bg="accent.tealLight" mx="auto" />
+
+              {/* Company Logos */}
+              {Array.isArray(item.logos) && item.logos.length > 0 && (
+                <Flex
+                  gap="4"
+                  justify="center"
+                  align="center"
+                  flexWrap="wrap"
+                  minH="80px"
+                >
+                  {item.logos.map((logo, index) => (
+                    <Box
+                      key={index}
+                      h={{ base: '50px', md: '60px', lg: '70px' }}
+                      w={{ base: '80px', md: '100px', lg: '120px' }}
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                    >
+                      <Image
+                        src={logo}
+                        alt={`${item.company} logo ${index + 1}`}
+                        maxH="100%"
+                        maxW="100%"
+                        objectFit="contain"
+                      />
+                    </Box>
+                  ))}
+                </Flex>
+              )}
+            </VStack>
+          );
+        })}
+      </SimpleGrid>
+    </Box>
+  );
+}
