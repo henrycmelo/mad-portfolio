@@ -4,6 +4,8 @@
 
 export interface HeroContent {
   id: string;
+  /** Small line above the headline, e.g. "Hi, I'm Madeline". HTML from TipTap. */
+  greeting?: string;
   title: string;
   subtitle?: string;
   description?: string;

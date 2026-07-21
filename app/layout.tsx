@@ -1,15 +1,18 @@
 import type { Metadata } from "next";
-import { DM_Sans } from "next/font/google";
+import { Archivo } from "next/font/google";
 import { config } from '@fortawesome/fontawesome-svg-core';
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import { Providers } from "./providers";
 
 config.autoAddCss = false;
 
-const dmSans = DM_Sans({
+// Stand-in for Sharp Grotesk, which is licence-restricted. Archivo is the
+// closest free grotesque - sharp terminals, holds up at 800 weight and 72px.
+const archivo = Archivo({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-dm-sans",
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-archivo",
 });
 
 export const metadata: Metadata = {
@@ -27,8 +30,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={dmSans.variable}>
-      <body className={dmSans.className}>
+    <html lang="en" className={archivo.variable}>
+      <body className={archivo.className}>
         <Providers>{children}</Providers>
       </body>
     </html>

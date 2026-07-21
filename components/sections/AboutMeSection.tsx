@@ -1,6 +1,7 @@
 'use client';
 
-import { Box, Grid, Text, Image, VStack } from '@chakra-ui/react';
+import { Badge, Box, Flex, Grid, Text, Image, VStack } from '@chakra-ui/react';
+import { RichText } from '@/components/ui/RichText';
 import type { AboutContent } from '@/lib/types';
 
 interface AboutMeSectionProps {
@@ -10,14 +11,14 @@ interface AboutMeSectionProps {
 export function AboutMeSection({ content }: AboutMeSectionProps) {
   return (
     <Box>
-      <Text
+      <RichText
         as="h2"
+        html={content.heading || 'About Me'}
+        spacing="tight"
         textStyle="h2"
         color="text.primary"
         pb="6"
-      >
-        {content.heading || 'About Me'}
-      </Text>
+      />
 
       <Grid
         w="full"
@@ -26,31 +27,12 @@ export function AboutMeSection({ content }: AboutMeSectionProps) {
       >
         {/* Left column - Bio text + Skills */}
         <Box>
-          <Box
+          <RichText
+            html={content.bio}
             color="text.tertiary"
-            dangerouslySetInnerHTML={{ __html: content.bio }}
-            css={{
-              '& p': {
-                marginBottom: '1.5rem',
-                fontSize: 'clamp(16px, 2vw, 20px)',
-                fontWeight: 400,
-                lineHeight: 1.7,
-              },
-              '& strong': {
-                fontWeight: 800,
-                color: 'var(--chakra-colors-text-primary)',
-              },
-              '& h3, & h4': {
-                fontSize: 'clamp(16px, 2vw, 20px)',
-                fontWeight: 800,
-                color: 'var(--chakra-colors-text-primary)',
-                marginBottom: '0.5rem',
-              },
-              '& a': {
-                textDecoration: 'underline',
-                color: 'var(--chakra-colors-accent-teal)',
-              },
-            }}
+            fontSize="clamp(16px, 2vw, 20px)"
+            fontWeight="400"
+            lineHeight="1.7"
           />
 
           {/* Skills section */}
@@ -59,21 +41,13 @@ export function AboutMeSection({ content }: AboutMeSectionProps) {
               <Text textStyle="bodyBold" color="text.primary">
                 Core Skills
               </Text>
-              <Box display="flex" flexWrap="wrap" gap="2">
+              <Flex wrap="wrap" gap="2">
                 {content.skills.map((skill, index) => (
-                  <Box
-                    key={index}
-                    px="3"
-                    py="1"
-                    textStyle="caption"
-                    color="text.inverse"
-                    bg="text.tertiary"
-                    borderRadius="md"
-                  >
+                  <Badge key={index} variant="subtle" colorPalette="brand">
                     {skill}
-                  </Box>
+                  </Badge>
                 ))}
-              </Box>
+              </Flex>
             </VStack>
           )}
         </Box>

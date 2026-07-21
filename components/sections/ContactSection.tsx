@@ -4,6 +4,7 @@ import { Box, Grid, VStack, Text, Flex, Link } from '@chakra-ui/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { faLinkedin } from '@fortawesome/free-brands-svg-icons';
+import { RichText } from '@/components/ui/RichText';
 import type { ContactContent } from '@/lib/types';
 
 interface ContactSectionProps {
@@ -19,20 +20,20 @@ export function ContactSection({ content }: ContactSectionProps) {
       alignItems="center"
     >
       {/* Left column - Bold heading */}
-      <Text
+      <RichText
         as="h2"
+        html={content.heading}
+        spacing="tight"
         textStyle="h1"
         color="text.primary"
-      >
-        {content.heading}
-      </Text>
+      />
 
       {/* Right column - Contact details */}
       <VStack align="start" gap="8">
         {/* Email */}
         <Box>
-          <Flex align="center" gap="3" mb="2">
-            <FontAwesomeIcon icon={faEnvelope} color="var(--chakra-colors-text-primary)" />
+          <Flex align="center" gap="3" mb="2" color="text.primary">
+            <FontAwesomeIcon icon={faEnvelope} />
             <Text textStyle="label" color="text.primary">
               Email
             </Text>
@@ -40,7 +41,7 @@ export function ContactSection({ content }: ContactSectionProps) {
           <Link
             href={`mailto:${content.email}`}
             textStyle="link"
-            color="accent.teal"
+            color="accent.brand"
             css={{
               '&:hover': {
                 textDecoration: 'underline',
@@ -54,8 +55,8 @@ export function ContactSection({ content }: ContactSectionProps) {
         {/* LinkedIn */}
         {content.linkedin_url && (
           <Box>
-            <Flex align="center" gap="3" mb="2">
-              <FontAwesomeIcon icon={faLinkedin} color="var(--chakra-colors-text-primary)" />
+            <Flex align="center" gap="3" mb="2" color="text.primary">
+              <FontAwesomeIcon icon={faLinkedin} />
               <Text textStyle="label" color="text.primary">
                 LinkedIn
               </Text>
@@ -65,7 +66,7 @@ export function ContactSection({ content }: ContactSectionProps) {
               target="_blank"
               rel="noopener noreferrer"
               textStyle="link"
-              color="accent.teal"
+              color="accent.brand"
               css={{
                 '&:hover': {
                   textDecoration: 'underline',

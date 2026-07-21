@@ -1,6 +1,7 @@
 'use client';
 
-import { Box, Text, VStack, Flex, Image } from '@chakra-ui/react';
+import { Box, Heading, Text, VStack, Flex, Image } from '@chakra-ui/react';
+import { RichText } from '@/components/ui/RichText';
 import type { WorkHistory } from '@/lib/types';
 
 interface BackgroundSectionProps {
@@ -24,14 +25,14 @@ export function BackgroundSection({ workHistory }: BackgroundSectionProps) {
   return (
     <Box>
       {/* Section Title */}
-      <Text
+      <Heading
         as="h2"
         textStyle="h2"
         color="text.primary"
         pb={{ base: '8', md: '12' }}
       >
         Background
-      </Text>
+      </Heading>
 
       <Flex
         direction={{ base: 'column', md: 'row' }}
@@ -61,7 +62,7 @@ export function BackgroundSection({ workHistory }: BackgroundSectionProps) {
                     <Box
                       h="3px"
                       w={{ md: '30px', lg: '50px' }}
-                      bg="accent.navy"
+                      bg="accent.brand"
                     />
                     {/* Arrow tip */}
                     <Box
@@ -70,7 +71,7 @@ export function BackgroundSection({ workHistory }: BackgroundSectionProps) {
                       borderTop="8px solid transparent"
                       borderBottom="8px solid transparent"
                       borderLeft="12px solid"
-                      borderLeftColor="accent.navy"
+                      borderLeftColor="accent.brand"
                     />
                   </Flex>
                   {/* Vertical arrow - mobile */}
@@ -85,7 +86,7 @@ export function BackgroundSection({ workHistory }: BackgroundSectionProps) {
                     <Box
                       w="3px"
                       h="30px"
-                      bg="accent.navy"
+                      bg="accent.brand"
                     />
                     {/* Arrow tip */}
                     <Box
@@ -94,7 +95,7 @@ export function BackgroundSection({ workHistory }: BackgroundSectionProps) {
                       borderLeft="8px solid transparent"
                       borderRight="8px solid transparent"
                       borderTop="12px solid"
-                      borderTopColor="accent.navy"
+                      borderTopColor="accent.brand"
                     />
                   </Flex>
                 </>
@@ -107,7 +108,7 @@ export function BackgroundSection({ workHistory }: BackgroundSectionProps) {
                   h={{ base: '110px', md: '120px', lg: '130px' }}
                   borderRadius="full"
                   border="3px solid"
-                  borderColor="accent.navy"
+                  borderColor="accent.brand"
                   display="flex"
                   alignItems="center"
                   justifyContent="center"
@@ -115,7 +116,7 @@ export function BackgroundSection({ workHistory }: BackgroundSectionProps) {
                 >
                   <VStack gap="0">
                     <Text
-                      color="accent.navy"
+                      color="accent.brand"
                       fontSize={{ base: 'lg', md: 'xl' }}
                       fontWeight="bold"
                       lineHeight="1.2"
@@ -123,7 +124,7 @@ export function BackgroundSection({ workHistory }: BackgroundSectionProps) {
                       {years.start}-
                     </Text>
                     <Text
-                      color="accent.navy"
+                      color="accent.brand"
                       fontSize={{ base: 'lg', md: 'xl' }}
                       fontWeight="bold"
                       lineHeight="1.2"
@@ -134,15 +135,15 @@ export function BackgroundSection({ workHistory }: BackgroundSectionProps) {
                 </Box>
 
                 {/* Category Title */}
-                <Text
+                <RichText
+                  html={item.position}
+                  spacing="tight"
                   textStyle="h3"
                   color="text.primary"
-                >
-                  {item.position}
-                </Text>
+                />
 
-                {/* Teal Divider Line */}
-                <Box w="60%" h="2px" bg="accent.tealLight" mx="auto" />
+                {/* Accent divider */}
+                <Box w="60%" h="2px" bg="accent.brand" mx="auto" />
 
                 {/* Company Logos */}
                 {Array.isArray(item.logos) && item.logos.length > 0 && (

@@ -1,22 +1,24 @@
+import { defineTokens } from '@chakra-ui/react';
+
+export const durations = defineTokens.durations({
+  fast: { value: '150ms' },
+  normal: { value: '200ms' },
+  slow: { value: '300ms' },
+  slower: { value: '500ms' },
+});
+
+export const easings = defineTokens.easings({
+  easeIn: { value: 'cubic-bezier(0.4, 0, 1, 1)' },
+  easeOut: { value: 'cubic-bezier(0, 0, 0.2, 1)' },
+  easeInOut: { value: 'cubic-bezier(0.4, 0, 0.2, 1)' },
+});
+
 /**
- * Transition tokens for consistent animations
+ * Ready-made `transition` shorthands. Not Chakra tokens - imported directly by
+ * recipes, the way snap&go's button recipe consumes them.
  */
-
 export const transitions = {
-  base: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-  slow: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-  fast: 'all 0.15s cubic-bezier(0.4, 0, 0.2, 1)',
-};
-
-export const durations = {
-  fast: '150ms',
-  base: '200ms',
-  slow: '300ms',
-  slower: '500ms',
-};
-
-export const easings = {
-  easeIn: 'cubic-bezier(0.4, 0, 1, 1)',
-  easeOut: 'cubic-bezier(0, 0, 0.2, 1)',
-  easeInOut: 'cubic-bezier(0.4, 0, 0.2, 1)',
+  fast: 'all 150ms cubic-bezier(0.4, 0, 0.2, 1)',
+  normal: 'all 200ms cubic-bezier(0.4, 0, 0.2, 1)',
+  slow: 'all 300ms cubic-bezier(0.4, 0, 0.2, 1)',
 };

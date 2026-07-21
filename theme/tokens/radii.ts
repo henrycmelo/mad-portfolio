@@ -1,15 +1,18 @@
-/**
- * Border radius tokens for consistent roundness
- */
+import { defineTokens } from '@chakra-ui/react';
 
-export const radii = {
-  none: '0',
-  sm: '0.125rem',  // 2px
-  base: '0.25rem', // 4px
-  md: '0.375rem',  // 6px
-  lg: '0.5rem',    // 8px
-  xl: '0.75rem',   // 12px
-  '2xl': '1rem',   // 16px
-  '3xl': '1.5rem', // 24px
-  full: '9999px',
-};
+/**
+ * Border radius scale.
+ *
+ * `md` (8px) is the workhorse - buttons, inputs, cards.
+ */
+export const radii = defineTokens.radii({
+  none: { value: '0' }, // full-bleed imagery
+  sm: { value: '4px' }, // badges, status chips
+  base: { value: '6px' }, // inputs
+  md: { value: '8px' }, // buttons, cards
+  lg: { value: '12px' }, // feature cards
+  xl: { value: '16px' },
+  '2xl': { value: '20px' },
+  '3xl': { value: '24px' },
+  full: { value: '9999px' }, // avatars, colour chips
+});

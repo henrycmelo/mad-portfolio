@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Box, Flex, Text, VStack, Image } from '@chakra-ui/react';
+import { Box, Flex, Image, Separator, Text, VStack } from '@chakra-ui/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faBars,
@@ -52,9 +52,9 @@ export function ResponsiveMenu({ profileImage, contactEmail, linkedinUrl }: Resp
         top="0"
         left="0"
         right="0"
-        bg="bg.primary"
+        bg="bg.warm"
         zIndex="1400"
-        boxShadow="lg"
+        boxShadow="raised"
       >
         <Flex justify="space-between" align="center" py="4" px="4">
           <Flex gap="3" align="center">
@@ -86,11 +86,11 @@ export function ResponsiveMenu({ profileImage, contactEmail, linkedinUrl }: Resp
         </Flex>
 
         {/* Divider line */}
-        <Box w="full" h="3px" bg="text.primary" />
+        <Separator borderColor="border.default" />
 
         {/* Collapse Menu */}
         {isOpen && (
-          <Box bg="bg.primary" color="text.secondary" boxShadow="lg">
+          <Box bg="bg.warm" color="text.secondary" boxShadow="overlay">
             <VStack gap="0" w="full">
               {sections.map((section) => (
                 <Box
@@ -100,14 +100,9 @@ export function ResponsiveMenu({ profileImage, contactEmail, linkedinUrl }: Resp
                   px="6"
                   cursor="pointer"
                   onClick={() => scrollToSection(section.id)}
-                  textStyle="caption"
+                  textStyle="appUI"
                   transition="all 0.2s"
-                  css={{
-                    '&:hover': {
-                      backgroundColor: 'var(--chakra-colors-text-primary)',
-                      color: 'var(--chakra-colors-text-inverse)',
-                    },
-                  }}
+                  _hover={{ bg: 'bg.surface', color: 'accent.brand' }}
                 >
                   <Flex gap="3" textTransform="capitalize" align="center">
                     <FontAwesomeIcon icon={section.icon} size="lg" />
@@ -117,7 +112,7 @@ export function ResponsiveMenu({ profileImage, contactEmail, linkedinUrl }: Resp
               ))}
 
               {/* Divider */}
-              <Box w="full" h="3px" bg="text.primary" />
+              <Separator borderColor="border.default" w="full" />
 
               {/* Social links */}
               <Flex direction="row" p="6" gap="6" color="text.tertiary" justify="center" w="full">
@@ -135,7 +130,7 @@ export function ResponsiveMenu({ profileImage, contactEmail, linkedinUrl }: Resp
             </VStack>
 
             {/* Bottom divider */}
-            <Box w="full" h="3px" bg="text.primary" />
+            <Separator borderColor="border.default" />
           </Box>
         )}
       </Box>

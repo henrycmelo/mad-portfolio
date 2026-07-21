@@ -1,67 +1,54 @@
-/**
- * Color tokens for the design system
- * Professional Blues & Teals palette
- */
+import { defineTokens } from '@chakra-ui/react';
 
-export const colors = {
+/**
+ * Primitive color tokens - Dropbox-inspired palette.
+ *
+ * Confident blue for anything interactive, on a warm paper-like canvas rather
+ * than clinical white. Raw values only; design intent lives in
+ * theme/semantic-tokens.ts and components reference that.
+ */
+export const colors = defineTokens.colors({
+  /**
+   * Brand blue. Doubles as a Chakra `colorPalette`, so the 50-950 ramp has to
+   * exist even though only a few steps are used directly.
+   * 500 is the brand blue; 700 is the documented hover.
+   */
   brand: {
-    primary: {
-      50: '#e6eef6',
-      100: '#ccdced',
-      200: '#99b9db',
-      300: '#6696c9',
-      400: '#3373b7',
-      500: '#0050a5',
-      600: '#004084',
-      700: '#003063',
-      800: '#002042',
-      900: '#1A365D', // Navy - Primary brand color
-    },
-    secondary: {
-      50: '#e5f5f4',
-      100: '#ccebe9',
-      200: '#99d7d3',
-      300: '#66c3bd',
-      400: '#33afa7',
-      500: '#319795', // Teal - Secondary brand color
-      600: '#27726f',
-      700: '#1d5653',
-      800: '#133b38',
-      900: '#0a1f1e',
-    },
-    accent: {
-      50: '#e8f4fb',
-      100: '#d0e9f7',
-      200: '#a1d3ef',
-      300: '#72bde7',
-      400: '#43a7df',
-      500: '#4299E1', // Light Blue - Accent color
-      600: '#357ab4',
-      700: '#285c87',
-      800: '#1a3d5a',
-      900: '#0d1f2d',
-    },
+    50: { value: '#EBF2FF' },
+    100: { value: '#D6E4FF' },
+    200: { value: '#ADC9FF' },
+    300: { value: '#84AEFF' },
+    400: { value: '#3D86FF' },
+    500: { value: '#0061FF' }, // primary - CTAs, links, interactive
+    600: { value: '#0055E0' },
+    700: { value: '#0048BD' }, // hover
+    800: { value: '#003690' },
+    900: { value: '#002670' },
+    950: { value: '#001A4D' },
   },
-  semantic: {
-    background: {
-      primary: 'gray.50',
-      secondary: 'white',
-      tertiary: 'gray.100',
-    },
-    surface: {
-      card: 'white',
-      overlay: 'rgba(0, 0, 0, 0.6)',
-    },
-    text: {
-      primary: 'gray.900',
-      secondary: 'gray.600',
-      tertiary: 'gray.500',
-      inverse: 'white',
-    },
-    border: {
-      default: 'gray.200',
-      hover: 'gray.300',
-      focus: 'brand.primary.500',
-    },
+
+  /** Creative accents. Marketing moments only - never product UI. */
+  coral: {
+    default: { value: '#FF5C35' },
+    sunset: { value: '#FF8C69' },
   },
-};
+
+  /** Neutrals - warm, not grey. */
+  neutral: {
+    ink: { value: '#1E1919' }, // headings, body
+    slate: { value: '#637282' }, // captions, metadata
+    muted: { value: '#9EA9B2' }, // placeholders
+    border: { value: '#D8D6D3' }, // dividers, input borders
+    borderSubtle: { value: '#EDECEA' }, // light section separators
+    warm: { value: '#F7F5F2' }, // warm off-white surface
+    white: { value: '#FFFFFF' },
+  },
+
+  /** Status. `info` deliberately reuses the brand blue. */
+  status: {
+    success: { value: '#0AC27D' },
+    error: { value: '#C0392B' },
+    warning: { value: '#F5A623' },
+    info: { value: '#0061FF' },
+  },
+});

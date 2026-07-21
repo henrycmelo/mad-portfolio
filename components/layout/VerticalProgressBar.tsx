@@ -1,7 +1,17 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { Box, VStack, Text, Image, Flex } from '@chakra-ui/react';
+import {
+  Avatar,
+  Box,
+  Button,
+  Flex,
+  IconButton,
+  Link,
+  Separator,
+  Text,
+  VStack,
+} from '@chakra-ui/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faHome,
@@ -33,7 +43,11 @@ interface VerticalProgressBarProps {
   linkedinUrl?: string;
 }
 
-export function VerticalProgressBar({ profileImage, contactEmail, linkedinUrl }: VerticalProgressBarProps) {
+export function VerticalProgressBar({
+  profileImage,
+  contactEmail,
+  linkedinUrl,
+}: VerticalProgressBarProps) {
   const [activeSection, setActiveSection] = useState('');
   const contentRef = useRef<HTMLElement | null>(null);
 
@@ -53,7 +67,8 @@ export function VerticalProgressBar({ profileImage, contactEmail, linkedinUrl }:
       if (!container) return;
 
       // If scrolled to the bottom, activate the last section
-      const isAtBottom = container.scrollHeight - container.scrollTop - container.clientHeight < 50;
+      const isAtBottom =
+        container.scrollHeight - container.scrollTop - container.clientHeight < 50;
       if (isAtBottom) {
         setActiveSection(sections[sections.length - 1].id);
         return;
@@ -98,104 +113,104 @@ export function VerticalProgressBar({ profileImage, contactEmail, linkedinUrl }:
       zIndex="10"
       h="100vh"
       gap="0"
+      align="stretch"
+      bg="bg.warm"
     >
       {/* Avatar + Name */}
       <Flex
         direction={{ base: 'column', lg: 'row' }}
-        py="12"
+        py="10"
+        px="6"
         align="center"
-        textTransform="capitalize"
-        w="90%"
         gap="3"
       >
-        <Box
-          w="48px"
-          h="48px"
-          borderRadius="full"
-          overflow="hidden"
-          flexShrink={0}
-        >
-          {profileImage ? (
-            <Image
-              src={profileImage}
-              alt="Madeline"
-              w="full"
-              h="full"
-              objectFit="cover"
-            />
-          ) : (
-            <Box w="full" h="full" bg="border.default" />
-          )}
-        </Box>
-        <Box textAlign={{ base: 'center', lg: 'left' }}>
-          <Text
-            textStyle="bodyBold"
-            color="text.primary"
-          >
+        <Avatar.Root size="lg" shape="full" flexShrink={0} colorPalette="brand">
+          <Avatar.Fallback name="Madeline" />
+          {profileImage && <Avatar.Image src={profileImage} alt="Madeline" />}
+        </Avatar.Root>
+
+        <Box textAlign={{ base: 'center', lg: 'left' }} minW="0">
+          <Text textStyle="bodyBold" color="text.primary">
             Madeline
           </Text>
-          <Text
-            textStyle="caption"
-            color="text.tertiary"
-          >
-            Strategic Partnerships & Operations
+          <Text textStyle="caption" color="text.secondary">
+            Strategic Partnerships &amp; Operations
           </Text>
         </Box>
       </Flex>
 
-      {/* Divider */}
-      <Box w="full" h="3px" bg="text.primary" />
+      <Separator borderColor="border.default" />
 
-      {/* Navigation Items */}
-      {sections.map((section) => (
-        <Box
-          key={section.id}
-          w="full"
-          onClick={() => scrollToSection(section.id)}
-          color={activeSection === section.id ? 'text.inverse' : 'text.secondary'}
-          fontWeight={activeSection === section.id ? 'bold' : 'normal'}
-          backgroundColor={activeSection === section.id ? 'text.primary' : 'transparent'}
-          cursor="pointer"
-          transition="background-color 0.3s"
-          py="6"
-          px="6"
-          display="flex"
-          justifyContent={{ base: 'center', lg: 'start' }}
-          alignItems="center"
-          textStyle="caption"
-        >
-          <Box display="flex" alignItems="center" gap="2" textTransform="capitalize">
-            <FontAwesomeIcon icon={section.icon} size="lg" />
-            <Box as="span" display={{ base: 'none', lg: 'inline' }}>
-              {section.label}
-            </Box>
-          </Box>
-        </Box>
-      ))}
+      {/* Navigation */}
+      <VStack as="nav" align="stretch" gap="0" py="2">
+        {sections.map((section) => {
+          const active = activeSection === section.id;
+          return (
+            <Button
+              key={section.id}
+              onClick={() => scrollToSection(section.id)}
+              variant={active ? 'subtle' : 'ghost'}
+              colorPalette="brand"
+              justifyContent={{ base: 'center', lg: 'flex-start' }}
+              gap="3"
+              px="6"
+              py="6"
+              borderRadius="none"
+              borderLeftWidth="3px"
+              borderLeftColor={active ? 'accent.brand' : 'transparent'}
+              color={active ? 'accent.brand' : 'text.secondary'}
+              fontWeight={active ? 'semibold' : 'normal'}
+              textStyle="appUI"
+              aria-current={active ? 'true' : undefined}
+            >
+              <FontAwesomeIcon icon={section.icon} size="lg" />
+              <Box as="span" display={{ base: 'none', lg: 'inline' }}>
+                {section.label}
+              </Box>
+            </Button>
+          );
+        })}
+      </VStack>
 
-      {/* Spacer */}
       <Box flex="1" />
 
-      {/* Divider */}
-      <Box w="full" h="3px" bg="text.primary" />
+      <Separator borderColor="border.default" />
 
-      {/* Social Links */}
+      {/* Social links */}
       <Flex
         direction={{ base: 'column', md: 'row' }}
         p="6"
-        gap="6"
-        color="text.tertiary"
-        alignItems="center"
+        gap="2"
+        align="center"
+        justify={{ base: 'center', lg: 'flex-start' }}
       >
         {contactEmail && (
-          <a href={`mailto:${contactEmail}`} title={contactEmail}>
-            <FontAwesomeIcon icon={faEnvelope} size="lg" />
-          </a>
+          <IconButton
+            asChild
+            aria-label={`Email ${contactEmail}`}
+            title={contactEmail}
+            variant="ghost"
+            colorPalette="brand"
+            size="sm"
+          >
+            <Link href={`mailto:${contactEmail}`}>
+              <FontAwesomeIcon icon={faEnvelope} size="lg" />
+            </Link>
+          </IconButton>
         )}
         {linkedinUrl && (
-          <a href={linkedinUrl} target="_blank" rel="noopener noreferrer" title="LinkedIn">
-            <FontAwesomeIcon icon={faLinkedin} size="lg" />
-          </a>
+          <IconButton
+            asChild
+            aria-label="LinkedIn profile"
+            title="LinkedIn"
+            variant="ghost"
+            colorPalette="brand"
+            size="sm"
+          >
+            <Link href={linkedinUrl} target="_blank" rel="noopener noreferrer">
+              <FontAwesomeIcon icon={faLinkedin} size="lg" />
+            </Link>
+          </IconButton>
         )}
       </Flex>
     </VStack>

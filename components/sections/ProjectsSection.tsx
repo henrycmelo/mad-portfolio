@@ -1,7 +1,7 @@
 'use client';
 
-import { Box, Grid, VStack, Text, Image, Flex } from '@chakra-ui/react';
-import { Badge } from '@/components/ui/Badges';
+import { Badge, Box, Card, Grid, Heading, Image, Flex } from '@chakra-ui/react';
+import { RichText } from '@/components/ui/RichText';
 import type { Project } from '@/lib/types';
 
 interface ProjectsSectionProps {
@@ -17,82 +17,62 @@ export function ProjectsSection({ projects }: ProjectsSectionProps) {
 
   return (
     <Box>
-      <Text
-        as="h2"
-        textStyle="h2"
-        color="text.primary"
-        pb="6"
-      >
+      <Heading as="h2" textStyle="h2" color="text.primary" pb="6">
         Recent Projects
-      </Text>
+      </Heading>
 
       <Grid
         w="full"
         templateColumns={{ base: '1fr', lg: 'repeat(2, 1fr)', '2xl': 'repeat(3, 1fr)' }}
-        gap={{ base: '6', md: '6' }}
+        gap="6"
       >
         {visibleProjects.map((project) => (
-          <Box
-            key={project.id}
-            color="text.primary"
-            border="1px solid"
-            borderColor="border.dark"
-            boxShadow="md"
-            maxW="lg"
-          >
-            <VStack
-              m="8"
-              textAlign="start"
-              justifyContent="flex-start"
-              alignItems="start"
-              gap="2"
-            >
-              {/* Project Image */}
-              {project.image && (
-                <Box w="full" h={{ base: '180px', md: '200px' }} overflow="hidden" mb="4" bg="bg.secondary" display="flex" alignItems="center" justifyContent="center">
-                  <Image
-                    src={project.image}
-                    alt={project.title}
-                    maxW="full"
-                    maxH="full"
-                    css={{
-                      objectFit: 'contain',
-                    }}
-                  />
-                </Box>
-              )}
+          <Card.Root key={project.id} variant="elevated" maxW="lg" overflow="hidden">
+            {project.image && (
+              <Box
+                w="full"
+                h={{ base: '180px', md: '200px' }}
+                bg="bg.warm"
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                overflow="hidden"
+              >
+                <Image
+                  src={project.image}
+                  alt=""
+                  maxW="full"
+                  maxH="full"
+                  objectFit="contain"
+                />
+              </Box>
+            )}
 
-              {/* Title */}
-              <Box h="4.5em" overflow="hidden">
-                <Text
-                  textStyle="bodyBold"
-                  lineClamp={2}
-                >
-                  {project.title}
-                </Text>
+            <Card.Body gap="3">
+              <Box minH="3em">
+                <RichText html={project.title} spacing="tight" textStyle="bodyBold" />
               </Box>
 
-              {/* Description */}
-              <Box h="6em">
-                <Text
+              <Box minH="5em">
+                <RichText
+                  html={project.short_description}
+                  spacing="tight"
                   textStyle="caption"
-                  color="text.tertiary"
-                  lineClamp={4}
-                >
-                  {project.short_description}
-                </Text>
+                  color="text.secondary"
+                />
               </Box>
 
-              {/* Technology Badges */}
               {project.technologies && project.technologies.length > 0 && (
-                <Flex gap="2" flexWrap="wrap" h="4em">
+                <Flex gap="2" wrap="wrap">
                   {project.technologies.map((tech, index) => (
-                    <Badge key={index}>{tech}</Badge>
+                    <Badge key={index} variant="subtle" colorPalette="brand">
+                      {tech}
+                    </Badge>
                   ))}
                 </Flex>
               )}
-            </VStack>
-          </Box>
+            </Card.Body>
+          </Card.Root>
         ))}
       </Grid>
     </Box>

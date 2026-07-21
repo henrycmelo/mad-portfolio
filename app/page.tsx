@@ -1,6 +1,7 @@
-import { Box } from '@chakra-ui/react';
+import { Separator } from '@chakra-ui/react';
 import { createClient } from '@/lib/supabase/server';
 import { MainLayout } from '@/components/layout/MainLayout';
+import { PageSection } from '@/components/layout/PageSection';
 import { LandingSection } from '@/components/sections/LandingSection';
 import { ProjectsSection } from '@/components/sections/ProjectsSection';
 import { BackgroundSection } from '@/components/sections/BackgroundSection';
@@ -44,52 +45,34 @@ export default async function Home() {
       contactEmail={data.contact?.email}
       linkedinUrl={data.contact?.linkedin_url}
     >
-      {/* Landing Section */}
-      <section>
-        <Box id="home" pb="16" px="12" pt={{ base: '32', md: '16' }}>
-          {data.hero && <LandingSection content={data.hero} />}
-        </Box>
-      </section>
+      {/* Landing - extra top padding clears the fixed mobile menu */}
+      <PageSection id="home" pt={{ base: '32', md: '20' }} pb="20">
+        {data.hero && <LandingSection content={data.hero} />}
+      </PageSection>
 
-      {/* Divider */}
-      <Box w="full" h="1px" bg="border.default" />
+      <Separator borderColor="border.subtle" />
 
-      {/* Projects Section */}
-      <section>
-        <Box id="projects" py="16" px="12">
-          {data.projects.length > 0 && <ProjectsSection projects={data.projects} />}
-        </Box>
-      </section>
+      <PageSection id="projects">
+        {data.projects.length > 0 && <ProjectsSection projects={data.projects} />}
+      </PageSection>
 
-      {/* Divider */}
-      <Box w="full" h="1px" bg="border.default" />
+      <Separator borderColor="border.subtle" />
 
-      {/* Background */}
-      <section>
-        <Box id="career" py="16" px="12">
-          {data.workHistory.length > 0 && <BackgroundSection workHistory={data.workHistory} />}
-        </Box>
-      </section>
+      <PageSection id="career">
+        {data.workHistory.length > 0 && <BackgroundSection workHistory={data.workHistory} />}
+      </PageSection>
 
-      {/* Divider */}
-      <Box w="full" h="1px" bg="border.default" />
+      <Separator borderColor="border.subtle" />
 
-      {/* About Me */}
-      <section>
-        <Box id="aboutme" py="16" px="12">
-          {data.about && <AboutMeSection content={data.about} />}
-        </Box>
-      </section>
+      <PageSection id="aboutme">
+        {data.about && <AboutMeSection content={data.about} />}
+      </PageSection>
 
-      {/* Divider */}
-      <Box w="full" h="1px" bg="border.default" />
+      <Separator borderColor="border.subtle" />
 
-      {/* Contact + Footer */}
-      <section>
-        <Box id="contact" py={{ base: '24', md: '32' }} px="12" minH="50vh" display="flex" alignItems="center">
-          {data.contact && <ContactSection content={data.contact} />}
-        </Box>
-      </section>
+      <PageSection id="contact" pt={{ base: '24', md: '28' }} pb={{ base: '24', md: '28' }}>
+        {data.contact && <ContactSection content={data.contact} />}
+      </PageSection>
     </MainLayout>
   );
 }
