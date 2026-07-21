@@ -12,8 +12,7 @@ export function AboutMeSection({ content }: AboutMeSectionProps) {
     <Box>
       <Text
         as="h2"
-        fontSize={{ base: '32px', sm: '36px', md: '42px', lg: '48px' }}
-        fontWeight="400"
+        textStyle="h2"
         color="text.primary"
         pb="6"
       >
@@ -25,7 +24,7 @@ export function AboutMeSection({ content }: AboutMeSectionProps) {
         templateColumns={{ base: '1fr', xl: 'repeat(2, 1fr)' }}
         gap={{ base: '6', md: '6', '2xl': '24' }}
       >
-        {/* Left column - Bio text */}
+        {/* Left column - Bio text + Skills */}
         <Box>
           <Box
             color="text.tertiary"
@@ -53,6 +52,30 @@ export function AboutMeSection({ content }: AboutMeSectionProps) {
               },
             }}
           />
+
+          {/* Skills section */}
+          {content.skills && content.skills.length > 0 && (
+            <VStack align="start" mt="6" gap="2">
+              <Text textStyle="bodyBold" color="text.primary">
+                Core Skills
+              </Text>
+              <Box display="flex" flexWrap="wrap" gap="2">
+                {content.skills.map((skill, index) => (
+                  <Box
+                    key={index}
+                    px="3"
+                    py="1"
+                    textStyle="caption"
+                    color="text.inverse"
+                    bg="text.tertiary"
+                    borderRadius="md"
+                  >
+                    {skill}
+                  </Box>
+                ))}
+              </Box>
+            </VStack>
+          )}
         </Box>
 
         {/* Right column - Profile Image */}
@@ -79,31 +102,6 @@ export function AboutMeSection({ content }: AboutMeSectionProps) {
               bg="bg.secondary"
               h="400px"
             />
-          )}
-
-          {/* Skills section */}
-          {content.skills && content.skills.length > 0 && (
-            <VStack align="start" mt="6" gap="2">
-              <Text fontSize={{ base: '16px', md: '18px' }} fontWeight="800" color="text.primary">
-                Core Skills
-              </Text>
-              <Box display="flex" flexWrap="wrap" gap="2">
-                {content.skills.map((skill, index) => (
-                  <Box
-                    key={index}
-                    px="3"
-                    py="1"
-                    fontSize={{ base: '12px', md: '14px' }}
-                    fontWeight="400"
-                    color="text.inverse"
-                    bg="text.tertiary"
-                    borderRadius="md"
-                  >
-                    {skill}
-                  </Box>
-                ))}
-              </Box>
-            </VStack>
           )}
         </Box>
       </Grid>

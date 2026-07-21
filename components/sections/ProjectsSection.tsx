@@ -19,8 +19,7 @@ export function ProjectsSection({ projects }: ProjectsSectionProps) {
     <Box>
       <Text
         as="h2"
-        fontSize={{ base: '32px', sm: '36px', md: '42px', lg: '48px' }}
-        fontWeight="400"
+        textStyle="h2"
         color="text.primary"
         pb="6"
       >
@@ -39,13 +38,6 @@ export function ProjectsSection({ projects }: ProjectsSectionProps) {
             border="1px solid"
             borderColor="border.dark"
             boxShadow="md"
-            transition="transform 0.3s ease-in-out"
-            css={{
-              '&:hover': {
-                transform: 'scale(1.05)',
-                cursor: 'pointer',
-              },
-            }}
             maxW="lg"
           >
             <VStack
@@ -73,8 +65,7 @@ export function ProjectsSection({ projects }: ProjectsSectionProps) {
               {/* Title */}
               <Box h="4.5em" overflow="hidden">
                 <Text
-                  fontSize={{ base: '16px', sm: '18px', md: '20px' }}
-                  fontWeight="800"
+                  textStyle="bodyBold"
                   lineClamp={2}
                 >
                   {project.title}
@@ -84,8 +75,7 @@ export function ProjectsSection({ projects }: ProjectsSectionProps) {
               {/* Description */}
               <Box h="6em">
                 <Text
-                  fontSize={{ base: '12px', md: '14px' }}
-                  fontWeight="400"
+                  textStyle="caption"
                   color="text.tertiary"
                   lineClamp={4}
                 >

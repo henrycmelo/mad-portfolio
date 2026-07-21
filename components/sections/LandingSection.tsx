@@ -16,15 +16,13 @@ export function LandingSection({ content }: LandingSectionProps) {
   };
 
   return (
-    <VStack align="start" gap="6" maxW="800px">
+    <VStack align="start" gap="6" w="full" maxW="1280px">
       <Text fontSize="md" color="text.tertiary">
         Hi, I&apos;m Madeline
       </Text>
       <Text
         as="h1"
-        fontSize={{ base: '40px', sm: '48px', md: '56px', lg: '72px' }}
-        fontWeight="800"
-        lineHeight="1.1"
+        textStyle="h1"
         color="text.primary"
       >
         {content.title}
@@ -35,7 +33,7 @@ export function LandingSection({ content }: LandingSectionProps) {
         )}
       </Text>
       {content.description && (
-        <Text fontSize={{ base: '16px', sm: '18px', md: '20px' }} color="text.tertiary" fontWeight="400">
+        <Text textStyle="body" color="text.tertiary">
           {content.description}
         </Text>
       )}

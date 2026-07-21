@@ -18,8 +18,7 @@ export function Footer({ contactEmail }: FooterProps) {
         justify="space-between"
         alignItems="center"
         color="text.tertiary"
-        fontSize={{ base: '12px', md: '14px' }}
-        fontWeight="400"
+        textStyle="caption"
         gap="2"
       >
         <Text>&copy; Copyright {year}</Text>

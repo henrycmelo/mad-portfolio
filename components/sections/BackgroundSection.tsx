@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Text, SimpleGrid, VStack, Flex, Image } from '@chakra-ui/react';
+import { Box, Text, VStack, Flex, Image } from '@chakra-ui/react';
 import type { WorkHistory } from '@/lib/types';
 
 interface BackgroundSectionProps {
@@ -26,99 +26,158 @@ export function BackgroundSection({ workHistory }: BackgroundSectionProps) {
       {/* Section Title */}
       <Text
         as="h2"
-        fontSize={{ base: '32px', sm: '36px', md: '42px', lg: '48px' }}
-        fontWeight="400"
+        textStyle="h2"
         color="text.primary"
         pb={{ base: '8', md: '12' }}
       >
         Background
       </Text>
 
-      <SimpleGrid
-        columns={{ base: 1, md: Math.min(visibleHistory.length, 3) }}
-        gap={{ base: '12', md: '10', lg: '16' }}
+      <Flex
+        direction={{ base: 'column', md: 'row' }}
+        align="center"
+        justify="center"
+        gap="0"
       >
-        {visibleHistory.map((item) => {
+        {visibleHistory.map((item, idx) => {
           const years = getYearRange(item);
           return (
-            <VStack key={item.id} gap="5" textAlign="center">
-              {/* Circular Year Badge */}
-              <Box
-                w={{ base: '110px', md: '120px', lg: '130px' }}
-                h={{ base: '110px', md: '120px', lg: '130px' }}
-                borderRadius="full"
-                border="3px solid"
-                borderColor="accent.navy"
-                display="flex"
-                alignItems="center"
-                justifyContent="center"
-                mx="auto"
-              >
-                <VStack gap="0">
-                  <Text
-                    color="accent.navy"
-                    fontSize={{ base: 'lg', md: 'xl' }}
-                    fontWeight="bold"
-                    lineHeight="1.2"
+            <Flex
+              key={item.id}
+              align="center"
+              direction={{ base: 'column', md: 'row' }}
+              flex="1"
+            >
+              {/* Arrow connector between items */}
+              {idx > 0 && (
+                <>
+                  {/* Horizontal arrow - desktop */}
+                  <Flex
+                    display={{ base: 'none', md: 'flex' }}
+                    align="center"
+                    flexShrink={0}
                   >
-                    {years.start}-
-                  </Text>
-                  <Text
-                    color="accent.navy"
-                    fontSize={{ base: 'lg', md: 'xl' }}
-                    fontWeight="bold"
-                    lineHeight="1.2"
-                  >
-                    {years.end}
-                  </Text>
-                </VStack>
-              </Box>
-
-              {/* Category Title */}
-              <Text
-                fontSize={{ base: 'lg', md: 'xl', lg: '2xl' }}
-                fontWeight="400"
-                color="text.primary"
-              >
-                {item.position}
-              </Text>
-
-              {/* Teal Divider Line */}
-              <Box w="60%" h="2px" bg="accent.tealLight" mx="auto" />
-
-              {/* Company Logos */}
-              {Array.isArray(item.logos) && item.logos.length > 0 && (
-                <Flex
-                  gap="4"
-                  justify="center"
-                  align="center"
-                  flexWrap="wrap"
-                  minH="80px"
-                >
-                  {item.logos.map((logo, index) => (
+                    {/* Line */}
                     <Box
-                      key={index}
-                      h={{ base: '50px', md: '60px', lg: '70px' }}
-                      w={{ base: '80px', md: '100px', lg: '120px' }}
-                      display="flex"
-                      alignItems="center"
-                      justifyContent="center"
-                    >
-                      <Image
-                        src={logo}
-                        alt={`${item.company} logo ${index + 1}`}
-                        maxH="100%"
-                        maxW="100%"
-                        objectFit="contain"
-                      />
-                    </Box>
-                  ))}
-                </Flex>
+                      h="3px"
+                      w={{ md: '30px', lg: '50px' }}
+                      bg="accent.navy"
+                    />
+                    {/* Arrow tip */}
+                    <Box
+                      w="0"
+                      h="0"
+                      borderTop="8px solid transparent"
+                      borderBottom="8px solid transparent"
+                      borderLeft="12px solid"
+                      borderLeftColor="accent.navy"
+                    />
+                  </Flex>
+                  {/* Vertical arrow - mobile */}
+                  <Flex
+                    display={{ base: 'flex', md: 'none' }}
+                    direction="column"
+                    align="center"
+                    flexShrink={0}
+                    my="2"
+                  >
+                    {/* Line */}
+                    <Box
+                      w="3px"
+                      h="30px"
+                      bg="accent.navy"
+                    />
+                    {/* Arrow tip */}
+                    <Box
+                      w="0"
+                      h="0"
+                      borderLeft="8px solid transparent"
+                      borderRight="8px solid transparent"
+                      borderTop="12px solid"
+                      borderTopColor="accent.navy"
+                    />
+                  </Flex>
+                </>
               )}
-            </VStack>
+
+              <VStack gap="5" textAlign="center" flex="1">
+                {/* Circular Year Badge */}
+                <Box
+                  w={{ base: '110px', md: '120px', lg: '130px' }}
+                  h={{ base: '110px', md: '120px', lg: '130px' }}
+                  borderRadius="full"
+                  border="3px solid"
+                  borderColor="accent.navy"
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                  mx="auto"
+                >
+                  <VStack gap="0">
+                    <Text
+                      color="accent.navy"
+                      fontSize={{ base: 'lg', md: 'xl' }}
+                      fontWeight="bold"
+                      lineHeight="1.2"
+                    >
+                      {years.start}-
+                    </Text>
+                    <Text
+                      color="accent.navy"
+                      fontSize={{ base: 'lg', md: 'xl' }}
+                      fontWeight="bold"
+                      lineHeight="1.2"
+                    >
+                      {years.end}
+                    </Text>
+                  </VStack>
+                </Box>
+
+                {/* Category Title */}
+                <Text
+                  textStyle="h3"
+                  color="text.primary"
+                >
+                  {item.position}
+                </Text>
+
+                {/* Teal Divider Line */}
+                <Box w="60%" h="2px" bg="accent.tealLight" mx="auto" />
+
+                {/* Company Logos */}
+                {Array.isArray(item.logos) && item.logos.length > 0 && (
+                  <Flex
+                    gap="4"
+                    justify="center"
+                    align="center"
+                    flexWrap="wrap"
+                    minH="80px"
+                  >
+                    {item.logos.map((logo, index) => (
+                      <Box
+                        key={index}
+                        h={{ base: '50px', md: '60px', lg: '70px' }}
+                        w={{ base: '80px', md: '100px', lg: '120px' }}
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center"
+                      >
+                        <Image
+                          src={logo}
+                          alt={`${item.company} logo ${index + 1}`}
+                          maxH="100%"
+                          maxW="100%"
+                          objectFit="contain"
+                        />
+                      </Box>
+                    ))}
+                  </Flex>
+                )}
+              </VStack>
+            </Flex>
           );
         })}
-      </SimpleGrid>
+      </Flex>
     </Box>
   );
 }

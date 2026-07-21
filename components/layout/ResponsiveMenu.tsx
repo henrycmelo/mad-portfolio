@@ -66,10 +66,10 @@ export function ResponsiveMenu({ profileImage, contactEmail, linkedinUrl }: Resp
               )}
             </Box>
             <Box>
-              <Text fontSize={{ base: '16px', md: '18px' }} fontWeight="800" color="text.primary">
+              <Text textStyle="bodyBold" color="text.primary">
                 Madeline
               </Text>
-              <Text fontSize="12px" fontWeight="400" color="text.tertiary">
+              <Text textStyle="caption" color="text.tertiary">
                 Strategic Partnerships & Operations
               </Text>
             </Box>
@@ -100,7 +100,7 @@ export function ResponsiveMenu({ profileImage, contactEmail, linkedinUrl }: Resp
                   px="6"
                   cursor="pointer"
                   onClick={() => scrollToSection(section.id)}
-                  fontSize={{ base: '12px', md: '14px' }}
+                  textStyle="caption"
                   transition="all 0.2s"
                   css={{
                     '&:hover': {

@@ -1,7 +1,6 @@
 import { Box } from '@chakra-ui/react';
 import { createClient } from '@/lib/supabase/server';
 import { MainLayout } from '@/components/layout/MainLayout';
-import { Footer } from '@/components/layout/Footer';
 import { LandingSection } from '@/components/sections/LandingSection';
 import { ProjectsSection } from '@/components/sections/ProjectsSection';
 import { BackgroundSection } from '@/components/sections/BackgroundSection';
@@ -85,22 +84,12 @@ export default async function Home() {
       {/* Divider */}
       <Box w="full" h="1px" bg="border.default" />
 
-      {/* Contact */}
+      {/* Contact + Footer */}
       <section>
-        <Box id="contact" py="16" px="12">
+        <Box id="contact" py={{ base: '24', md: '32' }} px="12" minH="50vh" display="flex" alignItems="center">
           {data.contact && <ContactSection content={data.contact} />}
         </Box>
       </section>
-
-      {/* Footer Divider */}
-      <Box w="full" h="3px" bg="text.primary" />
-
-      {/* Footer */}
-      <footer>
-        <Box mt="1">
-          <Footer contactEmail={data.contact?.email} />
-        </Box>
-      </footer>
     </MainLayout>
   );
 }

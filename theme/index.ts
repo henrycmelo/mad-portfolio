@@ -3,17 +3,8 @@ import { createSystem, defaultConfig, defineConfig } from '@chakra-ui/react';
 /**
  * Madeline Portfolio - Custom Chakra UI v3 System
  *
- * All colors are tokenized here as the single source of truth.
- * Components reference semantic tokens instead of hardcoded hex values.
- *
- * Typography scale (textStyles):
- *   h1: 40px → 48px → 56px → 72px (800 weight)
- *   h2: 32px → 36px → 42px → 48px (400 weight)
- *   h3: 28px → 32px → 36px → 40px (800 weight)
- *   p:  16px → 18px → 20px (400 weight)
- *   pbold: 16px → 18px → 20px (800 weight)
- *   button: 16px → 18px (800 weight)
- *   caption: 12px → 14px (400 weight)
+ * All colors and typography are tokenized here as the single source of truth.
+ * Components reference semantic tokens and textStyles instead of hardcoded values.
  */
 
 const customConfig = defineConfig({
@@ -100,6 +91,78 @@ const customConfig = defineConfig({
         md: { value: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)' },
         lg: { value: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)' },
         xl: { value: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)' },
+      },
+    },
+    textStyles: {
+      h1: {
+        value: {
+          fontSize: '40px',
+          fontWeight: 800,
+          lineHeight: 1.1,
+          sm: { fontSize: '48px' },
+          md: { fontSize: '56px' },
+          lg: { fontSize: '72px' },
+        },
+      },
+      h2: {
+        value: {
+          fontSize: '32px',
+          fontWeight: 400,
+          sm: { fontSize: '36px' },
+          md: { fontSize: '42px' },
+          lg: { fontSize: '48px' },
+        },
+      },
+      h3: {
+        value: {
+          fontSize: '1.125rem',
+          fontWeight: 400,
+          md: { fontSize: '1.25rem' },
+          lg: { fontSize: '1.5rem' },
+        },
+      },
+      body: {
+        value: {
+          fontSize: '16px',
+          fontWeight: 400,
+          sm: { fontSize: '18px' },
+          md: { fontSize: '20px' },
+        },
+      },
+      bodyBold: {
+        value: {
+          fontSize: '16px',
+          fontWeight: 800,
+          md: { fontSize: '18px' },
+        },
+      },
+      label: {
+        value: {
+          fontSize: '18px',
+          fontWeight: 800,
+          md: { fontSize: '22px' },
+        },
+      },
+      link: {
+        value: {
+          fontSize: '18px',
+          fontWeight: 400,
+          md: { fontSize: '22px' },
+        },
+      },
+      button: {
+        value: {
+          fontSize: '16px',
+          fontWeight: 800,
+          md: { fontSize: '18px' },
+        },
+      },
+      caption: {
+        value: {
+          fontSize: '12px',
+          fontWeight: 400,
+          md: { fontSize: '14px' },
+        },
       },
     },
     semanticTokens: {

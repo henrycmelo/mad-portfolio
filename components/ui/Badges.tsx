@@ -14,8 +14,7 @@ export function Badge({ children }: BadgeProps) {
       display="inline-block"
       px="3"
       py="1"
-      fontSize={{ base: '12px', md: '14px' }}
-      fontWeight="400"
+      textStyle="caption"
       color="text.inverse"
       bg="text.tertiary"
       borderRadius="md"

@@ -52,6 +52,13 @@ export function VerticalProgressBar({ profileImage, contactEmail, linkedinUrl }:
     const handleScroll = () => {
       if (!container) return;
 
+      // If scrolled to the bottom, activate the last section
+      const isAtBottom = container.scrollHeight - container.scrollTop - container.clientHeight < 50;
+      if (isAtBottom) {
+        setActiveSection(sections[sections.length - 1].id);
+        return;
+      }
+
       let currentSection = '';
       const containerRect = container.getBoundingClientRect();
       const triggerPoint = containerRect.top + containerRect.height / 3;
@@ -122,15 +129,13 @@ export function VerticalProgressBar({ profileImage, contactEmail, linkedinUrl }:
         </Box>
         <Box textAlign={{ base: 'center', lg: 'left' }}>
           <Text
-            fontSize={{ base: '16px', md: '18px', lg: '20px' }}
-            fontWeight="800"
+            textStyle="bodyBold"
             color="text.primary"
           >
             Madeline
           </Text>
           <Text
-            fontSize={{ base: '12px', md: '14px' }}
-            fontWeight="400"
+            textStyle="caption"
             color="text.tertiary"
           >
             Strategic Partnerships & Operations
@@ -157,7 +162,7 @@ export function VerticalProgressBar({ profileImage, contactEmail, linkedinUrl }:
           display="flex"
           justifyContent={{ base: 'center', lg: 'start' }}
           alignItems="center"
-          fontSize={{ base: '12px', md: '14px' }}
+          textStyle="caption"
         >
           <Box display="flex" alignItems="center" gap="2" textTransform="capitalize">
             <FontAwesomeIcon icon={section.icon} size="lg" />
