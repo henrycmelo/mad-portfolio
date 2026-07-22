@@ -3,24 +3,23 @@ import { defineRecipe } from '@chakra-ui/react';
 /**
  * Heading recipe.
  *
- * Translated from the old v2 `theme/components/heading.ts`, whose `color`
- * pointed at `semantic.text.primary` - a token path that does not exist here.
+ * Weight 600, not 700 - the system deliberately avoids over-bolded headlines,
+ * and 700 is reserved for feature card labels. Same single family as body text.
  *
- * The size scale deliberately covers the same xs..7xl range Chakra ships with.
- * Registering a recipe *replaces* the built-in one, so a shorter list would
- * silently delete sizes from every <Heading> in the app.
+ * The size scale covers the same xs..7xl range Chakra ships with: registering a
+ * recipe *replaces* the built-in one, so a shorter list would silently delete
+ * sizes from every <Heading> in the app.
  *
- * Most headings on the site use `textStyle="h1"|"h2"|"h3"` instead; this covers
- * the plain Chakra <Heading> component.
+ * Most headings on the site use `textStyle="display"|"h1"|"h2"|"h3"` instead;
+ * this covers the plain Chakra <Heading> component.
  */
 export const headingRecipe = defineRecipe({
   className: 'madeline-heading',
   base: {
     fontFamily: 'heading',
-    fontWeight: 'bold',
+    fontWeight: '600',
     color: 'text.primary',
-    lineHeight: 'tight',
-    letterSpacing: 'tighter',
+    lineHeight: '1.33',
   },
   variants: {
     size: {
@@ -30,11 +29,11 @@ export const headingRecipe = defineRecipe({
       lg: { fontSize: 'lg' },
       xl: { fontSize: 'xl' },
       '2xl': { fontSize: '2xl' },
-      '3xl': { fontSize: '3xl' },
-      '4xl': { fontSize: '4xl' },
-      '5xl': { fontSize: '5xl' },
-      '6xl': { fontSize: '6xl' },
-      '7xl': { fontSize: '7xl' },
+      '3xl': { fontSize: '3xl', lineHeight: '1.28' },
+      '4xl': { fontSize: '4xl', lineHeight: '1.28' },
+      '5xl': { fontSize: '5xl', lineHeight: '1.25' },
+      '6xl': { fontSize: '6xl', lineHeight: '1.25' },
+      '7xl': { fontSize: '7xl', lineHeight: '1.2' },
     },
   },
   defaultVariants: {

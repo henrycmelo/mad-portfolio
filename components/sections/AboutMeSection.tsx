@@ -43,7 +43,16 @@ export function AboutMeSection({ content }: AboutMeSectionProps) {
               </Text>
               <Flex wrap="wrap" gap="2">
                 {content.skills.map((skill, index) => (
-                  <Badge key={index} variant="subtle" colorPalette="brand">
+                  <Badge
+                    key={index}
+                    bg="bg.muted"
+                    color="text.secondary"
+                    borderRadius="full"
+                    px="3"
+                    py="1"
+                    textStyle="caption"
+                    fontWeight="normal"
+                  >
                     {skill}
                   </Badge>
                 ))}
@@ -59,7 +68,6 @@ export function AboutMeSection({ content }: AboutMeSectionProps) {
               maxW="400px"
               borderRadius="lg"
               overflow="hidden"
-              boxShadow="md"
               bg="bg.surface"
             >
               <Image

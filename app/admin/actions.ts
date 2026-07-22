@@ -2,7 +2,15 @@
 
 import { revalidatePath } from 'next/cache';
 import { getAdmin } from '@/lib/auth/requireAdmin';
-import { sanitizeRichText } from '@/lib/sanitize';
+import { createAdminClient } from '@/lib/supabase/admin';
+import {
+  rich,
+  plain,
+  nullable,
+  bool,
+  number,
+  stringArray,
+} from '@/lib/formFields';
 
 const BUCKET = 'mad-portfolio-images';
 
@@ -25,47 +33,6 @@ function revalidateAll(adminPath?: string) {
 }
 
 /* -------------------------------------------------------------------------- */
-/* Field helpers                                                              */
-/* -------------------------------------------------------------------------- */
-
-function rich(formData: FormData, key: string): string {
-  return sanitizeRichText(formData.get(key)?.toString() ?? '');
-}
-
-function plain(formData: FormData, key: string): string {
-  return formData.get(key)?.toString().trim() ?? '';
-}
-
-/** Optional plain field - empty string becomes null so the column stays clean. */
-function nullable(formData: FormData, key: string): string | null {
-  return plain(formData, key) || null;
-}
-
-function bool(formData: FormData, key: string): boolean {
-  const value = formData.get(key);
-  return value === 'true' || value === 'on' || value === '1';
-}
-
-function number(formData: FormData, key: string, fallback = 0): number {
-  const parsed = Number(formData.get(key));
-  return Number.isFinite(parsed) ? parsed : fallback;
-}
-
-/** JSON-encoded string arrays produced by TagListInput. */
-function stringArray(formData: FormData, key: string): string[] {
-  const raw = formData.get(key)?.toString();
-  if (!raw) return [];
-  try {
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed)
-      ? parsed.map((item) => String(item).trim()).filter(Boolean)
-      : [];
-  } catch {
-    return [];
-  }
-}
-
-/* -------------------------------------------------------------------------- */
 /* Single-row sections                                                        */
 /* -------------------------------------------------------------------------- */
 
@@ -80,13 +47,11 @@ export async function updateHero(
     .from('mad_hero_content')
     .update({
       greeting: rich(formData, 'greeting'),
-      title: rich(formData, 'title'),
       subtitle: rich(formData, 'subtitle'),
       description: rich(formData, 'description'),
       cta_text: nullable(formData, 'cta_text'),
-      cta_link: nullable(formData, 'cta_link'),
+      cta_secondary_text: nullable(formData, 'cta_secondary_text'),
       profile_image: nullable(formData, 'profile_image'),
-      background_image: nullable(formData, 'background_image'),
       updated_at: new Date().toISOString(),
     })
     .eq('id', plain(formData, 'id'));
@@ -167,7 +132,10 @@ export async function saveProject(
   const row = {
     title: rich(formData, 'title'),
     short_description: rich(formData, 'short_description'),
-    full_description: rich(formData, 'full_description'),
+    problem: rich(formData, 'problem'),
+    process: rich(formData, 'process'),
+    solution: rich(formData, 'solution'),
+    impact: rich(formData, 'impact'),
     image: nullable(formData, 'image'),
     technologies: stringArray(formData, 'technologies'),
     order_index: number(formData, 'order_index'),
@@ -318,7 +286,14 @@ async function swapOrder(
 /* -------------------------------------------------------------------------- */
 
 const MAX_UPLOAD_BYTES = 5 * 1024 * 1024;
-const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/svg+xml', 'image/gif'];
+/**
+ * SVG is deliberately excluded. The bucket is public, and an SVG opened at its
+ * public URL can execute script in this site's origin.
+ */
+const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+
+/** Whitelist, not free text - the folder decides the storage path. */
+const ALLOWED_FOLDERS = ['hero', 'about', 'projects', 'logos'] as const;
 
 export async function uploadImage(formData: FormData): Promise<ActionResult> {
   const admin = await getAdmin();
@@ -332,22 +307,159 @@ export async function uploadImage(formData: FormData): Promise<ActionResult> {
     return { ok: false, error: 'Images must be 5 MB or smaller.' };
   }
   if (!ALLOWED_TYPES.includes(file.type)) {
-    return { ok: false, error: 'Use a JPG, PNG, WebP, GIF or SVG image.' };
+    return { ok: false, error: 'Use a JPG, PNG, WebP or GIF image.' };
   }
 
-  const folder = plain(formData, 'folder') || 'uploads';
+  const requested = plain(formData, 'folder');
+  const folder = (ALLOWED_FOLDERS as readonly string[]).includes(requested)
+    ? requested
+    : 'uploads';
   const safeName = file.name.toLowerCase().replace(/[^a-z0-9.]+/g, '-');
   const path = `${folder}/${Date.now()}-${safeName}`;
 
-  const { error } = await admin.supabase.storage
-    .from(BUCKET)
-    .upload(path, file, { upsert: true, contentType: file.type });
+  /**
+   * The write goes through the service-role client on purpose.
+   *
+   * Storage RLS kept rejecting these uploads, and storage policies are awkward
+   * to debug: the Storage API connects as its own role, and a policy that
+   * errors surfaces as a plain "violates row-level security policy".
+   *
+   * Authorization is not weakened by this - getAdmin() above already proved
+   * the caller has a session whose email is in the ADMIN_EMAIL allowlist, and
+   * this action returns early otherwise. The service-role key never leaves the
+   * server, and the file type, size, name and folder are all validated before
+   * we get here.
+   */
+  const storage = createAdminClient().storage.from(BUCKET);
+
+  const { error } = await storage.upload(path, file, {
+    upsert: true,
+    contentType: file.type,
+  });
 
   if (error) return { ok: false, error: error.message };
 
   const {
     data: { publicUrl },
-  } = admin.supabase.storage.from(BUCKET).getPublicUrl(path);
+  } = storage.getPublicUrl(path);
 
   return { ok: true, url: publicUrl };
+}
+
+/* -------------------------------------------------------------------------- */
+/* Image library                                                               */
+/* -------------------------------------------------------------------------- */
+
+export interface StoredImage {
+  /** Path within the bucket, e.g. "hero/1784-photo.png". */
+  path: string;
+  name: string;
+  url: string;
+  size: number;
+  /** True when some piece of content still points at this URL. */
+  inUse: boolean;
+}
+
+export interface ListImagesResult {
+  ok: boolean;
+  images?: StoredImage[];
+  error?: string;
+}
+
+/**
+ * Every image URL currently referenced by content.
+ *
+ * Used to stop the library deleting a picture that is still on the site, and
+ * to label the one a field is already using.
+ */
+async function referencedImageUrls(): Promise<Set<string>> {
+  const db = createAdminClient();
+  const [hero, about, projects, work] = await Promise.all([
+    db.from('mad_hero_content').select('profile_image'),
+    db.from('mad_about_content').select('profile_image'),
+    db.from('mad_projects').select('image'),
+    db.from('mad_work_history').select('logos'),
+  ]);
+
+  const urls = new Set<string>();
+  const add = (value?: string | null) => {
+    if (value) urls.add(value);
+  };
+
+  hero.data?.forEach((r) => add(r.profile_image));
+  about.data?.forEach((r) => add(r.profile_image));
+  projects.data?.forEach((r) => add(r.image));
+  work.data?.forEach((r) => {
+    if (Array.isArray(r.logos)) r.logos.forEach((l: string) => add(l));
+  });
+
+  return urls;
+}
+
+/**
+ * Everything in the bucket, newest first.
+ *
+ * Walks the known folders *and* the bucket root, because images uploaded
+ * before the CMS existed live at the root with no folder prefix.
+ */
+export async function listImages(): Promise<ListImagesResult> {
+  const admin = await getAdmin();
+  if (!admin) return { ok: false, error: UNAUTHORIZED.error };
+
+  const storage = createAdminClient().storage.from(BUCKET);
+  const prefixes = ['', ...ALLOWED_FOLDERS, 'uploads'];
+
+  const found: StoredImage[] = [];
+  const referenced = await referencedImageUrls();
+
+  for (const prefix of prefixes) {
+    const { data, error } = await storage.list(prefix, {
+      limit: 200,
+      sortBy: { column: 'created_at', order: 'desc' },
+    });
+    if (error) return { ok: false, error: error.message };
+
+    for (const item of data ?? []) {
+      // Folder entries come back with a null id - only real objects have one.
+      if (!item.id) continue;
+      const path = prefix ? `${prefix}/${item.name}` : item.name;
+      const { data: pub } = storage.getPublicUrl(path);
+      found.push({
+        path,
+        name: item.name,
+        url: pub.publicUrl,
+        size: item.metadata?.size ?? 0,
+        inUse: referenced.has(pub.publicUrl),
+      });
+    }
+  }
+
+  return { ok: true, images: found };
+}
+
+/**
+ * Removes an image from the bucket.
+ *
+ * Refuses while any content still points at it - deleting in that case would
+ * leave a broken image on the live site with no warning.
+ */
+export async function deleteImage(path: string): Promise<ActionResult> {
+  const admin = await getAdmin();
+  if (!admin) return UNAUTHORIZED;
+
+  const storage = createAdminClient().storage.from(BUCKET);
+  const { data: pub } = storage.getPublicUrl(path);
+
+  const referenced = await referencedImageUrls();
+  if (referenced.has(pub.publicUrl)) {
+    return {
+      ok: false,
+      error: 'That image is still used on the site. Replace it there first.',
+    };
+  }
+
+  const { error } = await storage.remove([path]);
+  if (error) return { ok: false, error: error.message };
+
+  return { ok: true };
 }

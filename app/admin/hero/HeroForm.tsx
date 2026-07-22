@@ -22,7 +22,7 @@ export function HeroForm({ hero }: { hero: HeroContent }) {
       <VStack align="stretch" gap="6">
         <EditorField
           label="Greeting"
-          hint={`The small line above the headline - e.g. "Hi, I'm Madeline".`}
+          hint={`The lead-in line above the headline - e.g. "Hi, I'm Madeline. I am a".`}
         >
           <RichTextEditor
             name="greeting"
@@ -34,19 +34,7 @@ export function HeroForm({ hero }: { hero: HeroContent }) {
 
         <EditorField
           label="Headline"
-          hint="The big opening statement, directly under the greeting."
-        >
-          <RichTextEditor
-            name="title"
-            defaultValue={hero.title}
-            variant="minimal"
-            minH="70px"
-          />
-        </EditorField>
-
-        <EditorField
-          label="Headline continuation"
-          hint="Runs straight on from the headline, on the same line, in coral."
+          hint="The big statement under the greeting."
         >
           <RichTextEditor
             name="subtitle"
@@ -65,17 +53,18 @@ export function HeroForm({ hero }: { hero: HeroContent }) {
         </EditorField>
 
         <FormField
-          label="Button text"
+          label="Primary button label"
           name="cta_text"
           defaultValue={hero.cta_text}
-          placeholder="See My Work"
+          placeholder="Email me"
+          hint="Opens your email address - edit the address itself under Contact."
         />
         <FormField
-          label="Button link"
-          name="cta_link"
-          defaultValue={hero.cta_link}
-          placeholder="#projects"
-          hint="Use #projects or #contact to scroll to a section, or a full URL."
+          label="Secondary button label"
+          name="cta_secondary_text"
+          defaultValue={hero.cta_secondary_text}
+          placeholder="Let's connect"
+          hint="Opens your LinkedIn profile - edit the URL itself under Contact. Clear the LinkedIn URL there to hide this button."
         />
 
         <ImageUploader
@@ -83,14 +72,7 @@ export function HeroForm({ hero }: { hero: HeroContent }) {
           name="profile_image"
           folder="hero"
           defaultValue={hero.profile_image}
-          hint="Shown in the sidebar and mobile menu."
-        />
-
-        <ImageUploader
-          label="Background image"
-          name="background_image"
-          folder="hero"
-          defaultValue={hero.background_image}
+          hint="Shown in the top navigation bar."
         />
 
         <SaveBar result={result} />

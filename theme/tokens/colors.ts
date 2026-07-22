@@ -1,54 +1,53 @@
 import { defineTokens } from '@chakra-ui/react';
 
 /**
- * Primitive color tokens - Dropbox-inspired palette.
+ * Primitive color tokens - "Digital Trust, Blueprinted".
  *
- * Confident blue for anything interactive, on a warm paper-like canvas rather
- * than clinical white. Raw values only; design intent lives in
- * theme/semantic-tokens.ts and components reference that.
+ * A high-contrast neutral foundation (pure white to near-black) with one
+ * electric blue as the entire personality. Coinbase Blue is reserved for
+ * primary actions and brand marks - never for text or decoration.
+ *
+ * Note: the source reference lists Slate as `#5b616` and Ash as `#8a919` -
+ * both five digits, which are not valid CSS colours. The six-digit values
+ * from the reference's own colour guide are used here.
  */
 export const colors = defineTokens.colors({
   /**
-   * Brand blue. Doubles as a Chakra `colorPalette`, so the 50-950 ramp has to
-   * exist even though only a few steps are used directly.
-   * 500 is the brand blue; 700 is the documented hover.
+   * Coinbase Blue. Doubles as a Chakra `colorPalette`, so the 50-950 ramp has
+   * to exist; 500 is the brand blue, 300 is the lighter Interactive Blue used
+   * for secondary links.
    */
-  brand: {
-    50: { value: '#EBF2FF' },
-    100: { value: '#D6E4FF' },
-    200: { value: '#ADC9FF' },
-    300: { value: '#84AEFF' },
-    400: { value: '#3D86FF' },
-    500: { value: '#0061FF' }, // primary - CTAs, links, interactive
-    600: { value: '#0055E0' },
-    700: { value: '#0048BD' }, // hover
-    800: { value: '#003690' },
-    900: { value: '#002670' },
-    950: { value: '#001A4D' },
+  blue: {
+    50: { value: '#e6eeff' },
+    100: { value: '#cddcff' },
+    200: { value: '#a3beff' },
+    300: { value: '#578bfa' }, // Interactive Blue - secondary links
+    400: { value: '#2a6cff' },
+    500: { value: '#0052ff' }, // Coinbase Blue - primary CTAs, brand mark
+    600: { value: '#0043d1' },
+    700: { value: '#0035a6' },
+    800: { value: '#00287d' },
+    900: { value: '#001b54' },
+    950: { value: '#001133' },
   },
 
-  /** Creative accents. Marketing moments only - never product UI. */
-  coral: {
-    default: { value: '#FF5C35' },
-    sunset: { value: '#FF8C69' },
-  },
-
-  /** Neutrals - warm, not grey. */
+  /** Neutral ramp: pure white through to near-black. */
   neutral: {
-    ink: { value: '#1E1919' }, // headings, body
-    slate: { value: '#637282' }, // captions, metadata
-    muted: { value: '#9EA9B2' }, // placeholders
-    border: { value: '#D8D6D3' }, // dividers, input borders
-    borderSubtle: { value: '#EDECEA' }, // light section separators
-    warm: { value: '#F7F5F2' }, // warm off-white surface
-    white: { value: '#FFFFFF' },
+    white: { value: '#ffffff' },
+    frost: { value: '#f7f8f9' }, // subtle light background
+    cloud: { value: '#eef0f3' }, // dividers, hover fills
+    pewter: { value: '#dedfe2' }, // borders between light sections
+    ash: { value: '#8a919e' }, // helper text, disabled
+    slate: { value: '#5b616e' }, // body copy, footer links
+    charcoal: { value: '#141519' }, // alternate dark section
+    midnight: { value: '#0a0b0d' }, // dark sections, primary text
   },
 
-  /** Status. `info` deliberately reuses the brand blue. */
+  /** Market signal colours - the only other saturated hues in the system. */
   status: {
-    success: { value: '#0AC27D' },
-    error: { value: '#C0392B' },
-    warning: { value: '#F5A623' },
-    info: { value: '#0061FF' },
+    success: { value: '#27ad75' },
+    error: { value: '#f0616d' },
+    warning: { value: '#8a919e' },
+    info: { value: '#0052ff' },
   },
 });

@@ -1,8 +1,7 @@
 'use client';
 
-import { Grid, Box } from '@chakra-ui/react';
-import { VerticalProgressBar } from './VerticalProgressBar';
-import { ResponsiveMenu } from './ResponsiveMenu';
+import { Box } from '@chakra-ui/react';
+import { SiteNav } from './SiteNav';
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -11,44 +10,18 @@ interface MainLayoutProps {
   linkedinUrl?: string;
 }
 
-export function MainLayout({ children, profileImage, contactEmail, linkedinUrl }: MainLayoutProps) {
+/**
+ * Public site shell: a sticky top nav over a normally-scrolling document.
+ *
+ * This used to be a grid with a fixed left rail whose content area was its own
+ * scroll container. The document scrolls now, which is what lets the nav's
+ * scroll-spy listen to the window.
+ */
+export function MainLayout({ children, profileImage, contactEmail }: MainLayoutProps) {
   return (
-    <Grid
-      templateColumns={{ base: '1fr', md: '230px 1fr', lg: '280px 1fr' }}
-      h="100vh"
-      alignItems="start"
-      w="full"
-      overflow="hidden"
-    >
-      {/* Sidebar - Desktop only. A 1px border replaces the old 3px black
-          divider column, matching the admin shell. */}
-      <Box
-        display={{ base: 'none', md: 'block' }}
-        position="sticky"
-        h="fit-content"
-        borderRightWidth="1px"
-        borderColor="border.default"
-      >
-        <VerticalProgressBar
-          profileImage={profileImage}
-          contactEmail={contactEmail}
-          linkedinUrl={linkedinUrl}
-        />
-      </Box>
-
-      {/* Mobile menu - Mobile only */}
-      <Box display={{ base: 'block', md: 'none' }} position="fixed" top="0" left="0" right="0" zIndex="1400">
-        <ResponsiveMenu
-          profileImage={profileImage}
-          contactEmail={contactEmail}
-          linkedinUrl={linkedinUrl}
-        />
-      </Box>
-
-      {/* Scrollable Content Area */}
-      <Box overflowY="auto" h="100vh" data-scroll-container="true">
-        {children}
-      </Box>
-    </Grid>
+    <Box minH="100vh" bg="bg.primary">
+      <SiteNav profileImage={profileImage} contactEmail={contactEmail} />
+      <Box as="main">{children}</Box>
+    </Box>
   );
 }

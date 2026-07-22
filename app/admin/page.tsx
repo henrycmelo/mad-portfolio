@@ -26,7 +26,7 @@ export default function AdminDashboard() {
                       h="9"
                       flexShrink={0}
                       borderRadius="md"
-                      bg="bg.warm"
+                      bg="bg.tinted"
                       color="accent.brand"
                     >
                       <Icon size={18} aria-hidden />

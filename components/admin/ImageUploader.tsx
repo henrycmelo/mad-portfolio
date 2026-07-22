@@ -4,6 +4,7 @@ import { useRef, useState } from 'react';
 import { Box, Flex, Image, Input, Text } from '@chakra-ui/react';
 import { LuUpload, LuX } from 'react-icons/lu';
 import { uploadImage } from '@/app/admin/actions';
+import { ImageLibrary } from '@/components/admin/ImageLibrary';
 
 interface ImageUploaderProps {
   label: string;
@@ -49,7 +50,7 @@ export function ImageUploader({
   };
 
   return (
-    <Box w="full">
+    <Box w="full" data-testid={`image-uploader-${name}`}>
       <Text
         display="block"
         textStyle="captionBold"
@@ -101,10 +102,12 @@ export function ImageUploader({
               <button type="button" onClick={() => fileInput.current?.click()}>
                 <LuUpload size={14} />
                 <Text textStyle="captionBold">
-                  {uploading ? 'Uploading...' : 'Choose image'}
+                  {uploading ? 'Uploading...' : 'Upload new'}
                 </Text>
               </button>
             </Flex>
+
+            <ImageLibrary onSelect={setUrl} selectedUrl={url} />
 
             {url && (
               <Flex
@@ -131,7 +134,7 @@ export function ImageUploader({
           <Input
             ref={fileInput}
             type="file"
-            accept="image/*"
+            accept="image/jpeg,image/png,image/webp,image/gif"
             display="none"
             onChange={(event) => {
               const file = event.target.files?.[0];

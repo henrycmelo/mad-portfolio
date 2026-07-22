@@ -3,115 +3,136 @@ import { defineTextStyles } from '@chakra-ui/react';
 /**
  * Text styles.
  *
- * Two layers, deliberately separate:
- *   - a bold marketing layer (display / h1 / h2) at 700-800 weight with
- *     negative tracking. The heavy display weight is the brand signature -
- *     never soften it.
- *   - a quieter app layer (appUI / caption) at 14px and 12px for the CMS.
+ * The display face is reserved for large headlines - `display`, `h1` and `h2`.
+ * Everything from `h3` down is the workhorse sans. Headlines run at weight 400
+ * with near-solid line height, which is what gives them their declarative,
+ * architectural feel; body copy is deliberately breathable at 1.5-1.56.
  *
- * Desktop sizes come from the design; the smaller breakpoints scale down so
- * 72px headlines do not overflow a phone.
+ * Desktop sizes come from the type scale; smaller breakpoints scale down so an
+ * 80px headline does not overflow a phone.
  */
 export const textStyles = defineTextStyles({
   display: {
     value: {
+      fontFamily: 'heading',
       fontSize: '40px',
-      fontWeight: '800',
+      fontWeight: '400',
       lineHeight: '1.05',
-      letterSpacing: '-0.03em',
-      sm: { fontSize: '48px' },
-      md: { fontSize: '60px' },
-      lg: { fontSize: '72px' },
+      letterSpacing: '-0.02em',
+      sm: { fontSize: '52px' },
+      md: { fontSize: '64px' },
+      lg: { fontSize: '80px', lineHeight: '1' },
     },
   },
   h1: {
     value: {
-      fontSize: '34px',
-      fontWeight: '700',
-      lineHeight: '1.1',
+      fontFamily: 'heading',
+      fontSize: '36px',
+      fontWeight: '400',
+      lineHeight: '1.09',
       letterSpacing: '-0.02em',
-      sm: { fontSize: '40px' },
-      md: { fontSize: '46px' },
-      lg: { fontSize: '52px' },
+      sm: { fontSize: '44px' },
+      md: { fontSize: '64px', lineHeight: '1' },
     },
   },
   h2: {
     value: {
-      fontSize: '26px',
-      fontWeight: '700',
-      lineHeight: '1.15',
-      letterSpacing: '-0.01em',
-      sm: { fontSize: '30px' },
-      md: { fontSize: '36px' },
+      fontFamily: 'heading',
+      fontSize: '28px',
+      fontWeight: '400',
+      lineHeight: '1.09',
+      letterSpacing: '-0.02em',
+      md: { fontSize: '44px' },
     },
   },
   h3: {
     value: {
-      fontSize: '20px',
+      fontFamily: 'body',
+      fontSize: '24px',
       fontWeight: '600',
-      lineHeight: '1.3',
-      letterSpacing: '0',
-      md: { fontSize: '24px' },
+      lineHeight: '1.25',
+      md: { fontSize: '32px' },
+    },
+  },
+  subheading: {
+    value: {
+      fontFamily: 'body',
+      fontSize: '20px',
+      fontWeight: '400',
+      lineHeight: '1.56',
     },
   },
   body: {
     value: {
-      fontSize: '16px',
+      fontFamily: 'body',
+      fontSize: '18px',
       fontWeight: '400',
-      lineHeight: '1.6',
-      md: { fontSize: '17px' },
+      lineHeight: '1.5',
     },
   },
   bodyBold: {
     value: {
-      fontSize: '16px',
+      fontFamily: 'body',
+      fontSize: '18px',
       fontWeight: '600',
-      lineHeight: '1.6',
-      md: { fontSize: '17px' },
+      lineHeight: '1.5',
     },
   },
-  /** The app layer - file-browser scale, kept out of the marketing hierarchy. */
   appUI: {
     value: {
-      fontSize: '14px',
+      fontFamily: 'body',
+      fontSize: '17px',
       fontWeight: '400',
       lineHeight: '1.5',
     },
   },
   label: {
     value: {
-      fontSize: '14px',
+      fontFamily: 'body',
+      fontSize: '17px',
+      fontWeight: '600',
+      lineHeight: '1.5',
+    },
+  },
+  /** The hero's small intro line above the headline. */
+  eyebrow: {
+    value: {
+      fontFamily: 'body',
+      fontSize: '17px',
       fontWeight: '600',
       lineHeight: '1.5',
     },
   },
   link: {
     value: {
-      fontSize: '16px',
-      fontWeight: '500',
-      lineHeight: '1.6',
-      md: { fontSize: '17px' },
+      fontFamily: 'body',
+      fontSize: '17px',
+      fontWeight: '400',
+      lineHeight: '1.5',
     },
   },
   button: {
     value: {
-      fontSize: '16px',
+      fontFamily: 'body',
+      fontSize: '17px',
       fontWeight: '600',
       lineHeight: '1.5',
     },
   },
   caption: {
     value: {
-      fontSize: '12px',
+      fontFamily: 'body',
+      fontSize: '15px',
       fontWeight: '400',
-      lineHeight: '1.4',
+      lineHeight: '1.54',
     },
   },
   captionBold: {
     value: {
-      fontSize: '12px',
+      fontFamily: 'body',
+      fontSize: '15px',
       fontWeight: '600',
-      lineHeight: '1.4',
+      lineHeight: '1.54',
     },
   },
 });

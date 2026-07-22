@@ -4,13 +4,26 @@
 
 export interface HeroContent {
   id: string;
-  /** Small line above the headline, e.g. "Hi, I'm Madeline". HTML from TipTap. */
+  /** Lead-in line above the headline, e.g. "Hi, I'm Madeline. I am a". */
   greeting?: string;
-  title: string;
+  /**
+   * Retired. Its content was merged into `greeting`; no longer shown or
+   * written by the CMS. The column still holds the old value.
+   */
+  title?: string;
+  /** The headline itself. */
   subtitle?: string;
   description?: string;
+  /** Primary button label. Its destination is the Contact email. */
   cta_text?: string;
+  /** Secondary button label. Its destination is the Contact LinkedIn URL. */
+  cta_secondary_text?: string;
+  /**
+   * Retired. The primary button builds a mailto: from the contact email, so
+   * this is no longer read or written.
+   */
   cta_link?: string;
+  /** Retired - nothing renders a hero background image. */
   background_image?: string;
   profile_image?: string;
   updated_at: string;
@@ -41,7 +54,17 @@ export interface Project {
   id: string;
   title: string;
   short_description?: string;
-  full_description?: string; // HTML string from TipTap
+  /**
+   * Retired. Superseded by the four case-study blocks below; no longer shown
+   * or written by the CMS. The column still holds the earlier free-text
+   * version of this content.
+   */
+  full_description?: string;
+  /** Case-study blocks, all rich text from TipTap. */
+  problem?: string;
+  process?: string;
+  solution?: string;
+  impact?: string;
   image?: string;
   technologies?: string[]; // Array of tech tags
   metrics?: ProjectMetric[]; // Key achievements
@@ -97,10 +120,3 @@ export interface SiteSettings {
   updated_at: string;
 }
 
-// Form types for admin CMS
-export interface HeroFormData extends Omit<HeroContent, 'id' | 'updated_at'> {}
-export interface AboutFormData extends Omit<AboutContent, 'id' | 'updated_at'> {}
-export interface StatFormData extends Omit<Stat, 'id' | 'created_at' | 'updated_at'> {}
-export interface ProjectFormData extends Omit<Project, 'id' | 'created_at' | 'updated_at'> {}
-export interface WorkHistoryFormData extends Omit<WorkHistory, 'id' | 'created_at' | 'updated_at'> {}
-export interface ContactFormData extends Omit<ContactContent, 'id' | 'updated_at'> {}

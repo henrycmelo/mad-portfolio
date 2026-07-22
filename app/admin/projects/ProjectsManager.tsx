@@ -139,15 +139,22 @@ function ProjectForm({
           />
         </EditorField>
 
-        <EditorField
-          label="Full description"
-          hint="Not shown on the homepage yet - stored for a future detail page."
-        >
-          <RichTextEditor
-            name="full_description"
-            defaultValue={project?.full_description}
-            minH="110px"
-          />
+        {/* Case-study blocks. Each renders as a labelled row on the project
+            card; leaving one empty simply omits that row. */}
+        <EditorField label="Problem" hint="What needed solving.">
+          <RichTextEditor name="problem" defaultValue={project?.problem} minH="100px" />
+        </EditorField>
+
+        <EditorField label="Process" hint="How you approached it.">
+          <RichTextEditor name="process" defaultValue={project?.process} minH="100px" />
+        </EditorField>
+
+        <EditorField label="Solution" hint="What you built or changed.">
+          <RichTextEditor name="solution" defaultValue={project?.solution} minH="100px" />
+        </EditorField>
+
+        <EditorField label="Impact" hint="The outcome - numbers help.">
+          <RichTextEditor name="impact" defaultValue={project?.impact} minH="100px" />
         </EditorField>
 
         <TagListInput

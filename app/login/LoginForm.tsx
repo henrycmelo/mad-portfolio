@@ -61,8 +61,7 @@ export function LoginForm() {
         bg="bg.surface"
         border="1px solid"
         borderColor="border.default"
-        borderRadius="md"
-        boxShadow="lg"
+        borderRadius="button"
         p={{ base: '8', md: '10' }}
       >
         <VStack align="start" gap="6">
@@ -79,7 +78,7 @@ export function LoginForm() {
             <Box
               w="full"
               p="4"
-              borderRadius="md"
+              borderRadius="button"
               bg="bg.secondary"
               borderLeft="3px solid"
               borderLeftColor="accent.brand"
@@ -114,7 +113,7 @@ export function LoginForm() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     borderColor="border.default"
-                    borderRadius="md"
+                    borderRadius="button"
                     px="3"
                     py="6"
                     _focusVisible={{
@@ -135,7 +134,7 @@ export function LoginForm() {
                 <Button
                   type="submit"
                   variant="solid"
-                  borderRadius="md"
+                  borderRadius="button"
                   loading={loading}
                   w="full"
                 >

@@ -46,10 +46,11 @@ next-env.d.ts
 # docs
 SETUP_GUIDE.md
 DATABASE_TABLES.md
+codes.md
 
-# supabase (keep migrations under version control)
-supabase/*
-!supabase/migrations/
+# supabase - migrations are applied by hand in the Supabase SQL editor and
+# are kept out of version control at the owner's request
+supabase/
 
 # claude
 .claude/

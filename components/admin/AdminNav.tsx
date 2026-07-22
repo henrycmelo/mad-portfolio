@@ -22,7 +22,7 @@ export function AdminNav({ email }: { email: string }) {
       alignSelf={{ lg: 'flex-start' }}
       h={{ lg: '100vh' }}
       overflowY={{ lg: 'auto' }}
-      bg="bg.warm"
+      bg="bg.surface"
       borderRightWidth={{ base: '0', lg: '1px' }}
       borderBottomWidth={{ base: '1px', lg: '0' }}
       borderColor="border.default"
@@ -68,6 +68,7 @@ export function AdminNav({ email }: { email: string }) {
               textStyle="appUI"
             >
               <NextLink
+                data-testid={`admin-nav-${section.label.toLowerCase().replace(/\s+/g, "-")}`}
                 href={section.href}
                 aria-current={active ? 'page' : undefined}
               >

@@ -52,10 +52,9 @@ const FONT_FAMILIES = [
 /** Theme colours only - keeps every edit inside the palette. */
 const COLORS = [
   { label: 'Colour: default', value: '' },
-  { label: 'Ink', value: '#1E1919' },
-  { label: 'Slate', value: '#637282' },
-  { label: 'Blue', value: '#0061FF' },
-  { label: 'Coral', value: '#FF5C35' },
+  { label: 'Midnight', value: '#0a0b0d' },
+  { label: 'Slate', value: '#5b616e' },
+  { label: 'Link blue', value: '#578bfa' },
 ];
 
 const BLOCKS = [

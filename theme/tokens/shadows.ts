@@ -1,16 +1,27 @@
 import { defineTokens } from '@chakra-ui/react';
 
 /**
- * Elevation. Four deliberate levels - flat surfaces are the default, and depth
- * is reserved for things that actually float.
+ * Elevation - deliberately absent.
+ *
+ * This system creates depth by colour blocking: full-bleed white sections
+ * alternating with full-bleed near-black ones. Nothing casts a shadow.
+ *
+ * Every token resolves to `none` on purpose, so a stray `shadow="md"` left in
+ * a component is a silent no-op rather than a visual regression.
  */
+const flat = { value: 'none' };
+
 export const shadows = defineTokens.shadows({
-  none: { value: 'none' }, // sidebar, page background
-  sm: { value: '0 1px 3px rgba(0, 0, 0, 0.08)' },
-  raised: { value: '0 1px 3px rgba(0, 0, 0, 0.08)' }, // cards
-  md: { value: '0 4px 12px rgba(0, 0, 0, 0.12)' },
-  overlay: { value: '0 4px 12px rgba(0, 0, 0, 0.12)' }, // dropdowns, popovers
-  lg: { value: '0 8px 32px rgba(0, 0, 0, 0.15)' },
-  modal: { value: '0 8px 32px rgba(0, 0, 0, 0.15)' }, // dialogs
-  xl: { value: '0 8px 32px rgba(0, 0, 0, 0.15)' },
+  none: flat,
+  xs: flat,
+  sm: flat,
+  pressed: flat,
+  raised: flat,
+  md: flat,
+  overlay: flat,
+  lg: flat,
+  modal: flat,
+  xl: flat,
+  '2xl': flat,
+  inner: flat,
 });

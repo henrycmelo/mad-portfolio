@@ -57,15 +57,17 @@ const config = defineConfig({
     // toolbar's 14 IconButtons would lose their `ghost` variant and `sm` size.
   },
   globalCss: {
-    // Makes brand blue the default for every Chakra component that reads
-    // `colorPalette` - stock <Button variant="solid">, IconButton, focus rings.
+    // Makes Forest Ink the default for every Chakra component that reads
+    // `colorPalette` - stock <Button variant="solid">, IconButton, Badge,
+    // focus rings.
     ':root': {
       colorPalette: 'brand',
     },
     'html, body': {
       fontFamily: 'body',
       fontSize: 'md',
-      color: 'text.primary',
+      // Body copy is Charcoal; Forest Ink is reserved for headings and links.
+      color: 'text.secondary',
       lineHeight: 'normal',
       bg: 'bg.primary',
       margin: 0,

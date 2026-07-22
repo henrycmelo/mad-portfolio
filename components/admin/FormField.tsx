@@ -41,7 +41,7 @@ export function FormField({
   };
 
   return (
-    <Field.Root required={required} colorPalette="brand">
+    <Field.Root required={required} colorPalette="brand" data-testid={`field-${name}`}>
       <Field.Label textStyle="captionBold" color="text.primary">
         {label}
         <Field.RequiredIndicator />

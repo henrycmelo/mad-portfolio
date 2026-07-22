@@ -6,10 +6,22 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "ci:local": "npm run typecheck && npm run lint && npm run test:coverage && npm run build && npm audit --audit-level=high",
+    "ci": "docker compose -f docker-compose.ci.yml run --rm --build ci && npm run scan:secrets",
+    "scan:secrets": "docker compose -f docker-compose.ci.yml run --rm gitleaks",
+    "docker:build": "docker build -t madeline-portfolio .",
+    "docker:run": "docker run --rm -p 3000:3000 --env-file .env.local madeline-portfolio",
+    "sonar": "npm run test:coverage && docker compose -f docker-compose.ci.yml up -d sonarqube && docker compose -f docker-compose.ci.yml run --rm sonar-scanner",
+    "sonar:down": "docker compose -f docker-compose.ci.yml down",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui"
   },
   "dependencies": {
-    "@chakra-ui/next-js": "^2.4.2",
     "@chakra-ui/react": "^3.36.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
@@ -19,28 +31,27 @@
     "@fortawesome/react-fontawesome": "^3.4.0",
     "@supabase/ssr": "^0.12.3",
     "@supabase/supabase-js": "^2.110.7",
-    "@tiptap/extension-image": "^3.28.0",
     "@tiptap/extension-link": "^3.28.0",
     "@tiptap/extension-text-align": "^3.28.0",
     "@tiptap/extension-text-style": "^3.28.0",
     "@tiptap/react": "^3.28.0",
     "@tiptap/starter-kit": "^3.28.0",
-    "date-fns": "^4.4.0",
-    "framer-motion": "^12.42.2",
     "isomorphic-dompurify": "^3.19.0",
     "next": "^15.3.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-icons": "^5.7.0",
-    "react-vertical-timeline-component": "^4.0.0"
+    "react-icons": "^5.7.0"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.3.6",
+    "@playwright/test": "^1.61.1",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@types/react-vertical-timeline-component": "^3.3.6",
+    "@vitest/coverage-v8": "^4.1.10",
     "eslint": "^9",
     "eslint-config-next": "^15.3.0",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.1.10"
   }
 }

@@ -4,6 +4,7 @@ import { useRef, useState } from 'react';
 import { Box, Flex, Image, Input, Text } from '@chakra-ui/react';
 import { LuUpload, LuX } from 'react-icons/lu';
 import { uploadImage } from '@/app/admin/actions';
+import { ImageLibrary } from '@/components/admin/ImageLibrary';
 
 interface MultiImageUploaderProps {
   label: string;
@@ -129,15 +130,22 @@ export function MultiImageUploader({
         <button type="button" onClick={() => fileInput.current?.click()}>
           <LuUpload size={14} />
           <Text textStyle="captionBold">
-            {uploading ? 'Uploading...' : 'Add images'}
+            {uploading ? 'Uploading...' : 'Upload new'}
           </Text>
         </button>
       </Flex>
 
+      <Box display="inline-block" ml="2">
+        <ImageLibrary
+          onSelect={(u) => setUrls((current) => (current.includes(u) ? current : [...current, u]))}
+          triggerLabel="Add existing"
+        />
+      </Box>
+
       <Input
         ref={fileInput}
         type="file"
-        accept="image/*"
+        accept="image/jpeg,image/png,image/webp,image/gif"
         multiple
         display="none"
         onChange={(event) => {

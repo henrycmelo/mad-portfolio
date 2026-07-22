@@ -2,7 +2,7 @@
  * The admin allowlist.
  *
  * ADMIN_EMAIL accepts one address or a comma-separated list:
- *   ADMIN_EMAIL=nelsonmad3@gmail.com,henrycastillome@gmail.com
+ *   ADMIN_EMAIL=you@example.com,someone-else@example.com
  *
  * Keep this in sync with mad_is_admin() in
  * supabase/migrations/002_admin_cms.sql - that function is what actually
