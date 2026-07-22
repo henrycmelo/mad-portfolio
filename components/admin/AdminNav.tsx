@@ -3,8 +3,8 @@
 import NextLink, { useLinkStatus } from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Avatar, Box, Button, Flex, Separator, Spinner, Text, VStack } from '@chakra-ui/react';
-import { LuLogOut } from 'react-icons/lu';
 import { ADMIN_SECTIONS } from '@/components/admin/sections';
+import { SignOutButton } from '@/components/admin/SignOutButton';
 import type { AdminSection } from '@/components/admin/sections';
 
 /**
@@ -111,30 +111,7 @@ export function AdminNav({ email }: { email: string }) {
           </Text>
         </NextLink>
 
-        <form action="/auth/signout" method="post">
-          <Flex
-            asChild
-            w="full"
-            align="center"
-            justify="center"
-            gap="2"
-            px="3"
-            py="2"
-            borderWidth="1px"
-            borderColor="border.default"
-            borderRadius="md"
-            cursor="pointer"
-            color="text.secondary"
-            _hover={{ bg: 'bg.secondary', color: 'text.primary' }}
-          >
-            <button type="submit">
-              <LuLogOut size={15} />
-              <Text textStyle="captionBold">
-                Sign out
-              </Text>
-            </button>
-          </Flex>
-        </form>
+        <SignOutButton />
       </VStack>
     </Flex>
   );
