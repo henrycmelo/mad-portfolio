@@ -1,10 +1,34 @@
 'use client';
 
-import NextLink from 'next/link';
+import NextLink, { useLinkStatus } from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Avatar, Box, Button, Flex, Separator, Text, VStack } from '@chakra-ui/react';
+import { Avatar, Box, Button, Flex, Separator, Spinner, Text, VStack } from '@chakra-ui/react';
 import { LuLogOut } from 'react-icons/lu';
 import { ADMIN_SECTIONS } from '@/components/admin/sections';
+import type { AdminSection } from '@/components/admin/sections';
+
+/**
+ * The clicked item's own icon becomes a spinner while its page loads, so the
+ * feedback lands where the click did rather than only in the content area.
+ *
+ * useLinkStatus only reports for the Link it is rendered inside, which is why
+ * this is a child component rather than state held in AdminNav.
+ */
+function NavItemBody({ icon: Icon, label }: { icon: AdminSection['icon']; label: string }) {
+  const { pending } = useLinkStatus();
+
+  return (
+    <>
+      {/* Matched to the icon's box so swapping them does not shift the label. */}
+      {pending ? (
+        <Spinner boxSize="17px" borderWidth="2px" data-testid="admin-nav-pending" />
+      ) : (
+        <Icon size={17} aria-hidden />
+      )}
+      {label}
+    </>
+  );
+}
 
 export function AdminNav({ email }: { email: string }) {
   const pathname = usePathname();
@@ -49,7 +73,6 @@ export function AdminNav({ email }: { email: string }) {
       <VStack as="nav" align="stretch" gap="0" flex="1" py="2">
         {ADMIN_SECTIONS.map((section) => {
           const active = pathname === section.href;
-          const Icon = section.icon;
           return (
             <Button
               key={section.href}
@@ -72,8 +95,7 @@ export function AdminNav({ email }: { email: string }) {
                 href={section.href}
                 aria-current={active ? 'page' : undefined}
               >
-                <Icon size={17} aria-hidden />
-                {section.label}
+                <NavItemBody icon={section.icon} label={section.label} />
               </NextLink>
             </Button>
           );

@@ -41,7 +41,23 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-icons": "^5.7.0",
-    "sanitize-html": "^2.17.6"
+    "sanitize-html": "^2.17.6",
+    "standardwebhooks": "^1.0.0"
+  },
+  "_overrides_note": [
+    "Both advisories are transitive through next, and `npm audit fix` only",
+    "offers next@9.3.3 - a six-major downgrade - so the versions are forced",
+    "here instead.",
+    "sharp: libvips CVEs, fixed in 0.35.0. next declares it as an OPTIONAL",
+    "  dependency at ^0.34.3, which cannot resolve to 0.35. Nothing in this",
+    "  app imports next/image, so sharp is never actually invoked.",
+    "postcss: unescaped </style> XSS in stringify output, fixed in 8.5.10.",
+    "  next pins 8.4.31 exactly; 8.5.x is semver-compatible.",
+    "Revisit when next ships updated bounds - these can then be dropped."
+  ],
+  "overrides": {
+    "sharp": "^0.35.3",
+    "postcss": "^8.5.22"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.6",

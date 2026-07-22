@@ -80,6 +80,17 @@ const config = defineConfig({
         textDecoration: 'none',
       },
     },
+    /**
+     * Highlighting only repaints the background by default, leaving each
+     * element's own colour underneath - so Charcoal body copy and Midnight
+     * headings both sat on the blue at whatever contrast they happened to
+     * give. Setting the foreground too makes selection uniform, and it is the
+     * one place Coinbase Blue is allowed behind text.
+     */
+    '::selection': {
+      bg: 'accent.brand',
+      color: 'text.inverse',
+    },
   },
 });
 

@@ -22,25 +22,61 @@ import { system } from '@/theme';
  *
  * `useServerInsertedHTML` is the App Router's hook for exactly this: whatever
  * Emotion inserted during a server render is collected and flushed into <head>
- * as a single tag, so both sides see the same tree.
+ * so both sides see the same tree.
+ *
+ * The hook fires once per streaming flush, not once per render, so it has to
+ * emit only what is new since the previous call. Writing out the whole cache
+ * each time repeats every rule on every flush - that shipped a 1.4 MB homepage
+ * with 13 identical copies of the stylesheet. Wrapping `cache.insert` to record
+ * newly-inserted names, then draining that list per flush, keeps each rule in
+ * the document exactly once.
  */
 export function Providers({ children }: { children: React.ReactNode }) {
-  const [cache] = useState(() => {
+  const [{ cache, flush }] = useState(() => {
     const emotionCache = createCache({ key: 'css' });
     // Stops Emotion emitting its own inline <style> tags as it renders, which
     // is what produced the mismatched nodes.
     emotionCache.compat = true;
-    return emotionCache;
+
+    const prevInsert = emotionCache.insert.bind(emotionCache);
+    let pending: string[] = [];
+
+    emotionCache.insert = (...args: Parameters<typeof prevInsert>) => {
+      const serialized = args[1];
+      // Only track first insertion; Emotion re-inserts known names harmlessly.
+      if (emotionCache.inserted[serialized.name] === undefined) {
+        pending.push(serialized.name);
+      }
+      return prevInsert(...args);
+    };
+
+    const drain = () => {
+      const names = pending;
+      pending = [];
+      return names;
+    };
+
+    return { cache: emotionCache, flush: drain };
   });
 
-  useServerInsertedHTML(() => (
-    <style
-      data-emotion={`${cache.key} ${Object.keys(cache.inserted).join(' ')}`}
-      dangerouslySetInnerHTML={{
-        __html: Object.values(cache.inserted).join(' '),
-      }}
-    />
-  ));
+  useServerInsertedHTML(() => {
+    const names = flush();
+    if (names.length === 0) return null;
+
+    let styles = '';
+    for (const name of names) {
+      const rule = cache.inserted[name];
+      // Emotion stores `true` rather than a string for already-flushed names.
+      if (typeof rule === 'string') styles += rule;
+    }
+
+    return (
+      <style
+        data-emotion={`${cache.key} ${names.join(' ')}`}
+        dangerouslySetInnerHTML={{ __html: styles }}
+      />
+    );
+  });
 
   return (
     <CacheProvider value={cache}>
