@@ -12,6 +12,16 @@
   NODE_VERSION = "22"
   NEXT_TELEMETRY_DISABLED = "1"
 
+  # Netlify scans build output for the values of environment variables and
+  # fails the build if it finds any. Both NEXT_PUBLIC_* values are *meant* to
+  # be in the client bundle - that is what the prefix means - so without this
+  # every deploy fails with "Secrets scanning found secrets in build output".
+  #
+  # SUPABASE_SERVICE_ROLE_KEY and ADMIN_EMAIL are deliberately NOT listed:
+  # they are server-only, and the scanner should keep failing the build if
+  # either ever leaks into client output.
+  SECRETS_SCAN_OMIT_KEYS = "NEXT_PUBLIC_SUPABASE_URL,NEXT_PUBLIC_SUPABASE_ANON_KEY"
+
 # NOTE: there is deliberately no catch-all redirect here.
 #
 # This file previously carried a single-page-app rewrite:

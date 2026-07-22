@@ -18,7 +18,7 @@ import type {
  *
  * This runs in server components only. Do NOT move it into RichText: that
  * component is pulled into client bundles by the 'use client' sections, and
- * isomorphic-dompurify would drag jsdom in with it.
+ * the sanitiser has no business shipping to the browser.
  */
 
 /** Sanitises one field, preserving null/undefined so callers can test truthiness. */

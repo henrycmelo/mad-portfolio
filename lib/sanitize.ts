@@ -1,17 +1,34 @@
-import DOMPurify from 'isomorphic-dompurify';
+import sanitizeHtml from 'sanitize-html';
+
+/**
+ * HTML sanitising for CMS rich text.
+ *
+ * Backed by sanitize-html (htmlparser2) rather than DOMPurify on purpose.
+ * DOMPurify needs a DOM, so on the server it pulls in jsdom - which traced
+ * **637 files** into the homepage's serverless bundle and broke the deployed
+ * function. sanitize-html is pure JS and needs no DOM at all.
+ *
+ * The behaviour contract is defined by tests/unit/sanitize.test.ts.
+ */
 
 /**
  * Style properties the editor is allowed to emit. Anything else (position,
- * background-image, ...) is dropped so stored content can't break the layout.
+ * background-image, ...) is dropped so stored content cannot break the layout.
+ *
+ * The patterns also reject `url(...)` and `expression(...)` payloads: each
+ * value is matched against an allowlist regex rather than merely checked for
+ * a forbidden substring.
  */
-const ALLOWED_STYLE_PROPS = new Set([
-  'font-size',
-  'font-family',
-  'color',
-  'text-align',
-  'font-weight',
-  'font-style',
-]);
+const ALLOWED_STYLES = {
+  '*': {
+    'font-size': [/^\d+(\.\d+)?(px|em|rem|%|pt)$/i],
+    'font-family': [/^[\w\s'",-]+$/],
+    color: [/^#[0-9a-f]{3,8}$/i, /^rgba?\([\d\s.,%]+\)$/i, /^[a-z]+$/i],
+    'text-align': [/^(left|right|center|justify)$/i],
+    'font-weight': [/^(normal|bold|lighter|bolder|[1-9]00)$/i],
+    'font-style': [/^(normal|italic|oblique)$/i],
+  },
+};
 
 const ALLOWED_TAGS = [
   'p',
@@ -33,79 +50,52 @@ const ALLOWED_TAGS = [
 ];
 
 /**
- * Keep only the declarations the toolbar can produce, and reject any value
- * containing url()/expression() constructs.
- */
-function filterStyle(style: string): string {
-  return style
-    .split(';')
-    .map((declaration) => declaration.trim())
-    .filter(Boolean)
-    .filter((declaration) => {
-      const separator = declaration.indexOf(':');
-      if (separator === -1) return false;
-
-      const property = declaration.slice(0, separator).trim().toLowerCase();
-      const value = declaration.slice(separator + 1).trim().toLowerCase();
-
-      if (!ALLOWED_STYLE_PROPS.has(property)) return false;
-      if (value.includes('url(') || value.includes('expression(')) return false;
-
-      return true;
-    })
-    .join('; ');
-}
-
-let hooked = false;
-
-function ensureHooks() {
-  if (hooked) return;
-  hooked = true;
-
-  DOMPurify.addHook('afterSanitizeAttributes', (currentNode) => {
-    // Feature-detect rather than `instanceof Element`: on the server DOMPurify
-    // runs against jsdom, where `Element` is not a global and the check throws.
-    const node = currentNode as Element;
-    if (typeof node.getAttribute !== 'function') return;
-
-    const style = node.getAttribute('style');
-    if (style) {
-      const filtered = filterStyle(style);
-      if (filtered) {
-        node.setAttribute('style', filtered);
-      } else {
-        node.removeAttribute('style');
-      }
-    }
-
-    if (node.tagName === 'A' && node.hasAttribute('href')) {
-      node.setAttribute('target', '_blank');
-      node.setAttribute('rel', 'noopener noreferrer');
-    }
-  });
-}
-
-/**
- * Sanitizes rich text HTML produced by the admin editor. Applied on write, so
- * what lands in the database is already safe to render.
+ * Sanitises rich text HTML produced by the admin editor.
+ *
+ * Applied both on write (so what lands in the database is already safe) and on
+ * read (see lib/sanitizeContent.ts), because writing is not the only way
+ * content reaches these tables.
  */
 export function sanitizeRichText(html: string | null | undefined): string {
   if (!html) return '';
-  ensureHooks();
 
-  return DOMPurify.sanitize(html, {
-    ALLOWED_TAGS,
-    ALLOWED_ATTR: ['style', 'href', 'target', 'rel'],
-    ALLOWED_URI_REGEXP: /^(?:https?:|mailto:|tel:|#|\/)/i,
+  return sanitizeHtml(html, {
+    allowedTags: ALLOWED_TAGS,
+    allowedAttributes: {
+      a: ['href', 'target', 'rel'],
+      '*': ['style'],
+    },
+    allowedStyles: ALLOWED_STYLES,
+    // Anything else - notably javascript: - is dropped along with the attribute.
+    allowedSchemes: ['http', 'https', 'mailto', 'tel'],
+    allowedSchemesAppliedToAttributes: ['href'],
+    transformTags: {
+      // Links open in a new tab, so they must carry the opener guard.
+      a: (tagName, attribs) => ({
+        tagName,
+        attribs: attribs.href
+          ? { ...attribs, target: '_blank', rel: 'noopener noreferrer' }
+          : attribs,
+      }),
+    },
+    // Keep entities as authored instead of re-encoding them.
+    parser: { decodeEntities: false },
   });
 }
 
 /**
- * Strips all tags - for fields that feed plain-text contexts such as image
+ * Strips all markup - for fields that feed plain-text contexts such as image
  * alt text, <title>, and meta descriptions.
  */
 export function toPlainText(html: string | null | undefined): string {
   if (!html) return '';
-  const stripped = DOMPurify.sanitize(html, { ALLOWED_TAGS: [], ALLOWED_ATTR: [] });
+
+  const stripped = sanitizeHtml(html, {
+    allowedTags: [],
+    allowedAttributes: {},
+    // Without this, the *contents* of a <script> would survive as text.
+    nonTextTags: ['style', 'script', 'textarea', 'option', 'noscript'],
+  });
+
   return stripped.replace(/\s+/g, ' ').trim();
 }
